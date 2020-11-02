@@ -44,42 +44,48 @@ class _HomePageState extends State<HomePage> {
         string = "WiFi: Online";
     }
 
-    return new DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        bottomNavigationBar: TabBar(
-          tabs: [
-            Tab(
-              icon: new Icon(Icons.home),
-              text: getTranslated(context, 'Home'),
-            ),
-            Tab(
-              icon: new Icon(Icons.check_circle),
-              text: getTranslated(context, 'Approval'),
-            ),
-            Tab(
-              icon: new Icon(FontAwesomeIcons.chartLine),
-              text: getTranslated(context, 'CashFlow'),
-            ),
-            Tab(
-              icon: new Icon(Icons.person),
-              text: getTranslated(context, 'Account'),
-            )
-          ],
-          labelColor: kPrimaryColor,
-          labelPadding: EdgeInsets.only(left: 3, right: 3),
-          unselectedLabelColor: kGreyLightColor,
-        ),
-        body: DoubleBackToCloseApp(
-          snackBar: SnackBar(
-            content: Text(getTranslated(context, 'Tapbackagaintoleave')),
-          ),
-          child: TabBarView(
-            children: [Dashboard(), Approval(), CashFlow(), Account()],
-          ),
-        ),
-      ),
-    );
+    return Align(
+        alignment: Alignment.bottomLeft, // and bottomLeft
+        child: SafeArea(
+            bottom: true,
+            top: false,
+            child: DefaultTabController(
+              length: 4,
+              child: Scaffold(
+                bottomNavigationBar: TabBar(
+                  tabs: [
+                    Tab(
+                      icon: new Icon(Icons.home),
+                      text: getTranslated(context, 'Home'),
+                    ),
+                    Tab(
+                      icon: new Icon(Icons.check_circle),
+                      text: getTranslated(context, 'Approval'),
+                    ),
+                    Tab(
+                      icon: new Icon(FontAwesomeIcons.chartLine),
+                      text: getTranslated(context, 'CashFlow'),
+                    ),
+                    Tab(
+                      icon: new Icon(Icons.person),
+                      text: getTranslated(context, 'Account'),
+                    )
+                  ],
+                  labelColor: kPrimaryColor,
+                  labelPadding: EdgeInsets.only(left: 3, right: 3),
+                  unselectedLabelColor: kGreyLightColor,
+                ),
+                body: DoubleBackToCloseApp(
+                  snackBar: SnackBar(
+                    content:
+                        Text(getTranslated(context, 'Tapbackagaintoleave')),
+                  ),
+                  child: TabBarView(
+                    children: [Dashboard(), Approval(), CashFlow(), Account()],
+                  ),
+                ),
+              ),
+            )));
   }
 
   @override

@@ -34,48 +34,48 @@ class _AccountState extends State<Account> {
         backgroundColor: kPrimaryColor,
         shadowColor: Colors.transparent,
         centerTitle: true,
-        leading: Padding(
-          // margin: EdgeInsets.only(left: 0),
-          padding: const EdgeInsets.all(8.0),
-          // width: 50,
-          // color: Colors.pink,
-          child: DropdownButton<Language>(
-            underline: SizedBox(),
-            icon: Icon(
-              Icons.language,
-              color: Colors.white,
-            ),
-            onChanged: (Language language) {
-              _changeLanguage(language);
-            },
-            items: Language.languageList()
-                .map<DropdownMenuItem<Language>>(
-                  (e) => DropdownMenuItem<Language>(
-                    value: e,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Image.asset(
-                          e.flag,
-                          height: 25,
-                        ),
-                        Container(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(e.name)),
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
+        leading: IconButton(
+            icon: Icon(FontAwesomeIcons.bell),
+            color: kWhiteColor,
+            onPressed: () {
+              Navigator.pushNamed(context, notificationRoute);
+            }),
         actions: <Widget>[
-          IconButton(
-              icon: Icon(FontAwesomeIcons.bell),
-              color: kWhiteColor,
-              onPressed: () {
-                Navigator.pushNamed(context, notificationRoute);
-              }),
+          Padding(
+            // margin: EdgeInsets.only(left: 0),
+            padding: const EdgeInsets.all(8.0),
+            // width: 50,
+            // color: Colors.pink,
+            child: DropdownButton<Language>(
+              underline: SizedBox(),
+              icon: Icon(
+                Icons.language,
+                color: Colors.white,
+              ),
+              onChanged: (Language language) {
+                _changeLanguage(language);
+              },
+              items: Language.languageList()
+                  .map<DropdownMenuItem<Language>>(
+                    (e) => DropdownMenuItem<Language>(
+                      value: e,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Image.asset(
+                            e.flag,
+                            height: 25,
+                          ),
+                          Container(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Text(e.name)),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         ],
       ),
       body: Body(),
