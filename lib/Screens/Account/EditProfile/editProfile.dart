@@ -40,12 +40,10 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     myVariable = myVariable + 1;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(getTranslated(context, 'MyProfile')),
-        backgroundColor: kPrimaryColor,
-      ),
-      body: Body(),
-      resizeToAvoidBottomPadding: true,
-    );
+        appBar: AppBar(
+          title: Text(getTranslated(context, 'MyProfile')),
+          backgroundColor: kPrimaryColor,
+        ),
+        body: Body());
   }
 }

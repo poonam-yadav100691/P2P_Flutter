@@ -1,4 +1,6 @@
 const String homeRoute = '/home';
+
+const String landingRoute = '/landing';
 const String accountRoute = '/account';
 const String approvalRoute = '/approval';
 const String cashflowRoute = '/cashflow';

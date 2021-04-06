@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-
 import 'package:p2p/Screens/Approval/ApprovalDetails/approval-details.dart';
-import 'package:p2p/models/notiList.dart';
+import 'package:p2p/Screens/Approval/component/approvalPODO.dart';
+import 'package:p2p/Screens/HomePage/homePage.dart';
+import 'package:p2p/constants/AppConstant.dart';
+import 'package:p2p/constants/Services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants.dart';
-
+import 'package:http/http.dart' as http;
 import './background.dart';
 
 class Body extends StatefulWidget {
@@ -13,43 +16,74 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  List<NotiList> notiLists1 = [
-    NotiList(
-        title: 'PROOHQS10167',
-        profileImg: 'img/pic-1.png',
-        desc: "Software Developer dummy text here ",
-        date: '20/02/20'),
-    NotiList(
-        title: 'PROOHQS10160',
-        profileImg: 'img/pic-2.png',
-        desc: "UI Designer",
-        date: '20/02/20'),
-    NotiList(
-        title: 'PROO',
-        profileImg: 'img/pic-3.png',
-        desc: "Software Tester dummy textdummy",
-        date: '20/02/20'),
-    NotiList(
-        title: 'PROOHQS10160',
-        profileImg: 'img/pic-2.png',
-        desc: "UI Designer",
-        date: '20/02/20'),
-    NotiList(
-        title: 'PROOHQS10167',
-        profileImg: 'img/pic-2.png',
-        desc: "UI Designer dummy text heredummy",
-        date: '20/02/20'),
-    NotiList(
-        title: 'PROOHQS10167',
-        profileImg: 'img/pic-2.png',
-        desc: "UI Designer dummy text heredummy",
-        date: '20/02/20'),
-    NotiList(
-        title: 'PROOHQS10160',
-        profileImg: 'img/pic-2.png',
-        desc: "UI Designer dummy text heredummy",
-        date: '20/02/20'),
-  ];
+  bool isLoading = true;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  SharedPreferences sharedPreferences;
+
+  List<ResultObject> approvalList = new List();
+  int userID;
+
+  @override
+  void initState() {
+    _getApproveList();
+    super.initState();
+  }
+
+  Future<void> _getApproveList() async {
+    try {
+      final uri = Services.ApprovalList;
+      approvalList.clear();
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      String token = sharedPreferences.getString(AppConstant.ACCESS_TOKEN);
+      int buID = sharedPreferences.getInt(AppConstant.BUSINESSID.toString());
+      int deprtID = sharedPreferences.getInt(AppConstant.DEPARTMENT.toString());
+      int userID = sharedPreferences.getInt(AppConstant.USER_ID.toString());
+
+      Map body = {
+        "UserId": 33,
+        "BusinessUnitId": 4,
+        "DepartmentId": 8,
+        "TokenKey": "f62e03da-0576-4da4-9d17-8460df471401"
+      };
+
+      print("Body::: $body");
+      print("uri: $uri");
+      http.post(uri, body: body).then((response) {
+        print("jsonResponse");
+        var jsonResponse = jsonDecode(response.body);
+        print("jsonResponse: $jsonResponse");
+
+        ApprovalList approveList = new ApprovalList.fromJson(jsonResponse);
+        if (jsonResponse["StatusCode"] == 200) {
+          setState(() {
+            approvalList = approveList.resultObject;
+
+            userID = sharedPreferences.getInt(AppConstant.USER_ID.toString());
+            isLoading = false;
+          });
+        } else {
+          print("ModelError: ${jsonResponse["ModelErrors"]}");
+          if (jsonResponse["ModelErrors"] == 'Unauthorized') {
+            GetToken().getToken().then((value) {
+              _getApproveList();
+            });
+            // _getNewsList();
+            // Future<String> token = getToken();
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+            // currentState.showSnackBar(
+            //     UIhelper.showSnackbars(jsonResponse["ModelErrors"]));
+          }
+        }
+      }).then((value) => print("werror"));
+    } catch (e) {
+      print("Err: $e");
+      return (e);
+    }
+  }
 
   void _goToDetails(BuildContext context1, approveData) {
     // final body = json.decode(approveData);
@@ -71,23 +105,15 @@ class _BodyState extends State<Body> {
             appData: jsonUser,
           ),
         ));
-    // context,
-    // MaterialPageRoute(
-    //   builder: (context) {
-    //     var approvalDetails =
-    //         ApprovalDetails(notiLists1: NotiList);
-    //     return approvalDetails;
-    //   },
-    // ),
   }
 
-  Widget notiDetailCard(NotiList) {
+  Widget notiDetailCard(approvalList) {
     return Container(
       padding: new EdgeInsets.only(left: 10.0, right: 10.0, top: 10),
       child: new Card(
         child: new InkWell(
           onTap: () {
-            _goToDetails(context, NotiList);
+            _goToDetails(context, approvalList);
           },
           child: Row(
             children: <Widget>[
@@ -95,7 +121,7 @@ class _BodyState extends State<Body> {
                 height: 100,
                 width: 10,
                 decoration: new BoxDecoration(
-                  color: NotiList.title == "PROOHQS10167"
+                  color: approvalList.title == "PROOHQS10167"
                       ? Colors.grey
                       : Colors.orange,
                   borderRadius: BorderRadius.only(
@@ -111,19 +137,19 @@ class _BodyState extends State<Body> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        NotiList.title,
+                        approvalList.title,
                         style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        NotiList.desc,
+                        approvalList.desc,
                         style: new TextStyle(),
                       ),
                       Text(
-                        'BU: Headquarter',
+                        'BU: ${approvalList.businessUnitName}',
                         style: new TextStyle(),
                       ),
                       Text(
-                        'Total: 100223 Kip',
+                        'Total: ${approvalList.totalAmount}',
                         style: new TextStyle(),
                       ),
                     ],
@@ -146,26 +172,20 @@ class _BodyState extends State<Body> {
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0, right: 8),
                         child: Text(
-                          NotiList.date,
+                          approvalList.appDate,
                           style: new TextStyle(),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8.0, right: 8),
-                        child: NotiList.title == "PROOHQS10167"
-                            ? Text(
-                                'Pending',
-                                style: new TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: kGreyLightColor),
-                              )
-                            : Text(
-                                'On Hold',
-                                style: new TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: kOrangeColor),
-                              ),
-                      ),
+                          padding: const EdgeInsets.only(top: 8.0, right: 8),
+                          child: approvalList.title != null
+                              ? Text(
+                                  approvalList.appStatus,
+                                  style: new TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: kGreyLightColor),
+                                )
+                              : Container()),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: SizedBox(
@@ -176,7 +196,7 @@ class _BodyState extends State<Body> {
                                 borderRadius: BorderRadius.circular(8.0),
                                 side: BorderSide(color: Colors.green)),
                             onPressed: () {
-                              _goToDetails(context, NotiList);
+                              _goToDetails(context, approvalList);
                             },
                             padding: const EdgeInsets.all(0),
                             color: Colors.green,
@@ -199,20 +219,24 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return Background(
-      child: ListView(
-        padding: const EdgeInsets.all(8),
-        children: <Widget>[
-          Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: notiLists1.map((p) {
-                return notiDetailCard(p);
-              }).toList()
-              // SizedBox(height: size.height * 0.03),
+    if (!isLoading) {
+      return Background(
+        child: ListView(
+          padding: const EdgeInsets.all(8),
+          children: <Widget>[
+            Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: approvalList.map((p) {
+                  return notiDetailCard(p);
+                }).toList()
+                // SizedBox(height: size.height * 0.03),
 
-              ),
-        ],
-      ),
-    );
+                ),
+          ],
+        ),
+      );
+    } else {
+      return Center(child: CircularProgressIndicator());
+    }
   }
 }

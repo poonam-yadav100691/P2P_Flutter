@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:p2p/constants.dart';
 import 'package:p2p/localization/localization_constants.dart';
 import 'package:p2p/routes/custome_router.dart';
 import 'package:p2p/routes/route_names.dart';
-import 'package:connectivity/connectivity.dart';
-import 'constants.dart';
 import 'localization/demo_localization.dart';
 
 void main() => runApp(MyApp());
@@ -74,7 +73,7 @@ class _MyAppState extends State<MyApp> {
           return supportedLocales.first;
         },
         onGenerateRoute: CustomRouter.generatedRoute,
-        initialRoute: loginRoute,
+        initialRoute: landingRoute,
       );
     }
   }

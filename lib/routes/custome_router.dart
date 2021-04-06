@@ -10,6 +10,7 @@ import 'package:p2p/Screens/Dashboard/dashboard-page.dart';
 import 'package:p2p/Screens/HomePage/homePage.dart';
 import 'package:p2p/Screens/Login/login-page.dart';
 import 'package:p2p/Screens/NotificationPage/notification-page.dart';
+import 'package:p2p/landing.dart';
 import 'package:p2p/routes/route_names.dart';
 
 class CustomRouter {
@@ -17,6 +18,8 @@ class CustomRouter {
     switch (settings.name) {
       case homeRoute:
         return MaterialPageRoute(builder: (_) => HomePage());
+      case landingRoute:
+        return MaterialPageRoute(builder: (_) => Landing());
       case accountRoute:
         return MaterialPageRoute(builder: (_) => Account());
       case approvalRoute:

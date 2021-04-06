@@ -42,15 +42,13 @@ class _ApprovalDetailsState extends State<ApprovalDetails> {
 
     // print(appData);
     return Scaffold(
-      appBar: AppBar(
-        // title: Text(jsonUser['title']),
-        title: Text(getTranslated(context, 'ApprovalDetails')),
-        backgroundColor: kPrimaryColor,
-        shadowColor: Colors.transparent,
-        centerTitle: true,
-      ),
-      body: Body(jsonUser: jsonUser),
-      resizeToAvoidBottomPadding: true,
-    );
+        appBar: AppBar(
+          // title: Text(jsonUser['title']),
+          title: Text(getTranslated(context, 'ApprovalDetails')),
+          backgroundColor: kPrimaryColor,
+          shadowColor: Colors.transparent,
+          centerTitle: true,
+        ),
+        body: Body(jsonUser: jsonUser));
   }
 }

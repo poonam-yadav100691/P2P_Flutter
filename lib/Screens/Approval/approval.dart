@@ -40,27 +40,26 @@ class _ApprovalState extends State<Approval> {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        drawer: NavDrawer(),
-        appBar: AppBar(
-          title: Text(getTranslated(context, 'Approval')),
-          backgroundColor: kPrimaryColor,
-          shadowColor: Colors.transparent,
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(FontAwesomeIcons.bell),
-                color: kWhiteColor,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NotificationPage()),
-                  );
-                }),
-          ],
-        ),
-        body: Body(),
-        resizeToAvoidBottomPadding: true,
-      ),
+          drawer: NavDrawer(),
+          appBar: AppBar(
+            title: Text(getTranslated(context, 'Approval')),
+            backgroundColor: kPrimaryColor,
+            shadowColor: Colors.transparent,
+            centerTitle: true,
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(FontAwesomeIcons.bell),
+                  color: kWhiteColor,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationPage()),
+                    );
+                  }),
+            ],
+          ),
+          body: Body()),
     );
   }
 }
