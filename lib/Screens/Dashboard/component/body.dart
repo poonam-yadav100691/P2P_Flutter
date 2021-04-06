@@ -330,67 +330,66 @@ class _BodyState extends State<Body> {
           crossAxisSpacing: 12.0,
           mainAxisSpacing: 12.0,
           children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 30,
-                  child: IconButton(
-                      icon: Icon(FontAwesomeIcons.bell),
-                      color: kPrimaryColor,
-                      onPressed: () {
-                        Navigator.pushNamed(context, notificationRoute);
-                      }),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 70),
-                    // color: Colors.yellow,
-                    child: ClipOval(
-                      child: Image.asset(
-                        "assets/images/TKS_ERP.png",
-                        // width: size.width * 0.9,
-                        height: 70,
+            Container(
+              margin: EdgeInsets.only(top: 25),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 30,
+                    child: IconButton(
+                        icon: Icon(FontAwesomeIcons.bell),
+                        color: kPrimaryColor,
+                        onPressed: () {
+                          Navigator.pushNamed(context, notificationRoute);
+                        }),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 70),
+                      // color: Colors.yellow,
+                      child: ClipOval(
+                        child: Image.asset(
+                          "assets/images/TKS_ERP.png",
+                          // width: size.width * 0.9,
+                          height: 70,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  // margin: EdgeInsets.only(left: 0),
-                  // padding: EdgeInsets.only(left: 0),
-                  // width: 50,
-                  // color: Colors.pink,
-                  child: DropdownButton<Language>(
-                    underline: SizedBox(),
-                    icon: Icon(
-                      Icons.language,
-                      color: Colors.pink,
-                    ),
-                    onChanged: (Language language) {
-                      _changeLanguage(language);
-                    },
-                    items: Language.languageList()
-                        .map<DropdownMenuItem<Language>>(
-                          (e) => DropdownMenuItem<Language>(
-                            value: e,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Image.asset(
-                                  e.flag,
-                                  height: 25,
-                                ),
-                                Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(e.name)),
-                              ],
+                  Container(
+                    child: DropdownButton<Language>(
+                      underline: SizedBox(),
+                      icon: Icon(
+                        Icons.language,
+                        color: Colors.pink,
+                      ),
+                      onChanged: (Language language) {
+                        _changeLanguage(language);
+                      },
+                      items: Language.languageList()
+                          .map<DropdownMenuItem<Language>>(
+                            (e) => DropdownMenuItem<Language>(
+                              value: e,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Image.asset(
+                                    e.flag,
+                                    height: 25,
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Text(e.name)),
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                        .toList(),
+                          )
+                          .toList(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
