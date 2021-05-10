@@ -1,7 +1,9 @@
 import 'dart:io';
 
 class AppConstant {
-  static final int USER_ID = 0;
+  static final String USER_ID = "userId";
+  static final String DEPARTMENT = "deptId";
+  static final String BUSINESSID = "businessId";
   static final String EMP_ID = "0";
 
   static final String LoginGmailID = "loginGmailId";
@@ -17,8 +19,6 @@ class AppConstant {
   static final String IMAGE = "image";
   static final String PHONENO = "empPhone1";
   static final String EMAIL = "userEmail";
-  static final int DEPARTMENT = 0;
-  static final int BUSINESSID = 0;
 
   static final String REFRESHTOKEN = "refreshToken";
 

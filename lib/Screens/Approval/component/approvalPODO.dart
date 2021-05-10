@@ -39,50 +39,70 @@ class ApprovalList {
 }
 
 class ResultObject {
+  int p2PTypeId;
   int appID;
   String appNo;
   String appDate;
   String title;
+  int businessUnitId;
   String businessUnitName;
   double totalAmount;
   String appStatus;
   String appType;
   String currencyName;
+  int approverId;
+  int levelId;
+  int createdBy;
 
   ResultObject(
-      {this.appID,
+      {this.p2PTypeId,
+      this.appID,
       this.appNo,
       this.appDate,
       this.title,
+      this.businessUnitId,
       this.businessUnitName,
       this.totalAmount,
       this.appStatus,
       this.appType,
-      this.currencyName});
+      this.currencyName,
+      this.approverId,
+      this.levelId,
+      this.createdBy});
 
   ResultObject.fromJson(Map<String, dynamic> json) {
+    p2PTypeId = json['P2PTypeId'];
     appID = json['AppID'];
     appNo = json['AppNo'];
     appDate = json['AppDate'];
     title = json['Title'];
+    businessUnitId = json['BusinessUnitId'];
     businessUnitName = json['BusinessUnitName'];
     totalAmount = json['TotalAmount'];
     appStatus = json['AppStatus'];
     appType = json['AppType'];
     currencyName = json['CurrencyName'];
+    approverId = json['ApproverId'];
+    levelId = json['LevelId'];
+    createdBy = json['CreatedBy'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['P2PTypeId'] = this.p2PTypeId;
     data['AppID'] = this.appID;
     data['AppNo'] = this.appNo;
     data['AppDate'] = this.appDate;
     data['Title'] = this.title;
+    data['BusinessUnitId'] = this.businessUnitId;
     data['BusinessUnitName'] = this.businessUnitName;
     data['TotalAmount'] = this.totalAmount;
     data['AppStatus'] = this.appStatus;
     data['AppType'] = this.appType;
     data['CurrencyName'] = this.currencyName;
+    data['ApproverId'] = this.approverId;
+    data['LevelId'] = this.levelId;
+    data['CreatedBy'] = this.createdBy;
     return data;
   }
 }

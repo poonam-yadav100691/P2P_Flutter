@@ -9,9 +9,9 @@ import 'package:p2p/constants/AppConstant.dart';
 import 'package:p2p/constants/Network.dart';
 import 'package:p2p/constants/Services.dart';
 import 'package:p2p/localization/localization_constants.dart';
+import 'package:p2p/main.dart';
 import 'package:p2p/routes/route_names.dart';
 import 'package:p2p/utils/UIhelper.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import './background.dart';
 import 'package:http/http.dart' as http;
@@ -28,13 +28,12 @@ class _BodyState extends State<Body> {
   final TextEditingController usernameController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  SharedPreferences sharedPreferences;
+  // SharedPreferences sharedPreferences;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> _handleSubmitted() async {
     if (_formKey.currentState.validate()) {
       UIhelper.dismissKeyboard(context);
-
       getToken();
     } else {
       print("Els");
@@ -44,7 +43,7 @@ class _BodyState extends State<Body> {
   Future<void> getToken() async {
     Network().check().then((intenet) async {
       if (intenet != null && intenet) {
-        sharedPreferences = await SharedPreferences.getInstance();
+        // sharedPreferences = await SharedPreferences.getInstance();
 
         try {
           final uri = Services.LOGIN;
@@ -55,7 +54,7 @@ class _BodyState extends State<Body> {
           };
           print("BODY: $body");
 
-          http.post(uri, body: body).then((response) {
+          http.post(uri, body: body).then((response) async {
             if (response.statusCode == 200) {
               var jsonResponse = jsonDecode(response.body);
               print("Reponse---2 : $jsonResponse");
@@ -64,29 +63,27 @@ class _BodyState extends State<Body> {
                     new ResultObject.fromJson(jsonResponse["ResultObject"][0]);
                 // print(login.toString());
                 print("login.tokenKey: ${login.tokenKey}");
-                sharedPreferences.setInt(
-                    AppConstant.DEPARTMENT.toString(), login.departmentId);
-                sharedPreferences.setInt(
-                    AppConstant.BUSINESSID.toString(), login.businessUnitId);
-                sharedPreferences.setInt(
+                await globalMyLocalPrefes.setInt(
                     AppConstant.USER_ID.toString(), login.userId);
-                print(
-                    "G1 ${sharedPreferences.getInt(AppConstant.DEPARTMENT.toString())}");
-                print(
-                    "G2 ${sharedPreferences.getInt(AppConstant.BUSINESSID.toString())}");
-                print(
-                    "G3 ${sharedPreferences.getInt(AppConstant.USER_ID.toString())}");
 
-                sharedPreferences.setString(
+                await globalMyLocalPrefes.setInt(
+                    AppConstant.DEPARTMENT.toString(), login.departmentId);
+                await globalMyLocalPrefes.setInt(
+                    AppConstant.BUSINESSID.toString(), login.businessUnitId);
+
+                await globalMyLocalPrefes.setString(
                     AppConstant.ACCESS_TOKEN, login.tokenKey);
-                sharedPreferences.setString(
+                await globalMyLocalPrefes.setString(
                     AppConstant.USERNAME, login.firstName);
-                sharedPreferences.setString(AppConstant.IMAGE, login.photoPath);
-                sharedPreferences.setString(AppConstant.PHONENO, login.mobile);
-                sharedPreferences.setString(AppConstant.EMAIL, login.email);
-                sharedPreferences.setString(
+                await globalMyLocalPrefes.setString(
+                    AppConstant.IMAGE, login.photoPath);
+                await globalMyLocalPrefes.setString(
+                    AppConstant.PHONENO, login.mobile);
+                await globalMyLocalPrefes.setString(
+                    AppConstant.EMAIL, login.email);
+                await globalMyLocalPrefes.setString(
                     AppConstant.LoginGmailID, usernameController.text.trim());
-                sharedPreferences.setString(
+                await globalMyLocalPrefes.setString(
                     AppConstant.PASSWORD, passwordController.text.trim());
 
                 // sharedPreferences.setString(AppConstant.EMP_ID, login.emp_no);

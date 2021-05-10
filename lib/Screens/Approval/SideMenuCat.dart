@@ -1,4 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:p2p/Screens/Approval/FilterDataPODO.dart';
+import 'package:p2p/Screens/HomePage/homePage.dart';
+import 'package:p2p/constants/Network.dart';
+import 'package:p2p/constants/Services.dart';
+import 'package:toast/toast.dart';
+import 'package:http/http.dart' as http;
 
 class SideMenuCat extends StatefulWidget {
   SideMenuCat();
@@ -9,6 +16,8 @@ class SideMenuCat extends StatefulWidget {
 
 class _SideMenuCatState extends State<SideMenuCat> {
   List selecteCategorys = List();
+  List<ResultObject> filterDataList = new List();
+  bool isLoading = true;
 
   void _onCategorySelected(bool selected, categoryId) {
     if (selected == true) {
@@ -22,6 +31,67 @@ class _SideMenuCatState extends State<SideMenuCat> {
     }
 
     print(selecteCategorys);
+  }
+
+  Future<void> _getFilterList() async {
+    Network().check().then((intenet) async {
+      if (intenet != null && intenet) {
+        try {
+          final uri = Services.ApprovalList;
+          filterDataList.clear();
+
+          http.get(uri).then((response) async {
+            if (response.statusCode == 200) {
+              var jsonResponse = jsonDecode(response.body);
+              print("Reponse---2 : $jsonResponse");
+              if (jsonResponse["StatusCode"] == 200) {
+                FilterData filterList = new FilterData.fromJson(jsonResponse);
+                setState(() {
+                  filterDataList =
+                      filterList.resultObject as List<ResultObject>;
+                  isLoading = false;
+                });
+                print("filterDataList ${filterDataList.length}");
+                print("filterDataList ${filterDataList[0]}");
+              } else {
+                if (jsonResponse["ModelErrors"] == 'Unauthorized') {
+                  GetToken().getToken().then((value) {
+                    _getFilterList();
+                  });
+                  // _getNewsList();
+                  // Future<String> token = getToken();
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                  Toast.show(
+                      "Something went wrong.. Please try again later.", context,
+                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                }
+              }
+            } else {
+              print("response.statusCode.." + response.statusCode.toString());
+              Toast.show(
+                  "Something wnet wrong.. Please try again later.", context,
+                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+            }
+          });
+        } catch (e) {
+          print("Error: $e");
+          return (e);
+        }
+      } else {
+        Navigator.pop(context);
+        Toast.show("Please check internet connection", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getFilterList();
   }
 
   @override

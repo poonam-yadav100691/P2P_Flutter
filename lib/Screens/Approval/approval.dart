@@ -25,7 +25,6 @@ class _ApprovalState extends State<Approval> {
 
   @override
   void dispose() {
-    print("BACK BUTTON45678!");
     BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }

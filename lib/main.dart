@@ -4,7 +4,10 @@ import 'package:p2p/constants.dart';
 import 'package:p2p/localization/localization_constants.dart';
 import 'package:p2p/routes/custome_router.dart';
 import 'package:p2p/routes/route_names.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'localization/demo_localization.dart';
+
+SharedPreferences globalMyLocalPrefes;
 
 void main() => runApp(MyApp());
 
@@ -26,6 +29,18 @@ class _MyAppState extends State<MyApp> {
       print("&455&&& $locale");
       _locale = locale;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    initSharePref();
+    // analytics.logAppOpen();
+    super.initState();
+  }
+
+  initSharePref() async {
+    globalMyLocalPrefes = await SharedPreferences.getInstance();
   }
 
   @override

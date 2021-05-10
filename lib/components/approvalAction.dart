@@ -1,22 +1,41 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:p2p/Screens/Approval/approval.dart';
+import 'package:p2p/Screens/HomePage/homePage.dart';
 import 'package:p2p/constants.dart';
+import 'package:p2p/constants/Services.dart';
 import 'package:p2p/localization/localization_constants.dart';
+import 'package:toast/toast.dart';
 
 class ApprovalAction extends StatefulWidget {
   final String actionText;
+  final Map actionData;
+  ApprovalAction(
+      {Key key, @required this.actionText, @required this.actionData})
+      : super(key: key);
 
-  ApprovalAction(this.actionText);
   @override
-  State<StatefulWidget> createState() => ApprovalActionState();
+  _ApprovalActionState createState() =>
+      _ApprovalActionState(actionText, actionData);
 }
 
-class ApprovalActionState extends State<ApprovalAction>
+class _ApprovalActionState extends State<ApprovalAction>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> scaleAnimation;
+  String actionText;
+  Map actionData;
+
+  bool isLoading;
+  _ApprovalActionState(this.actionText, this.actionData);
 
   @override
   void initState() {
+    Map body = widget.actionData;
+    print(body);
+    //_submitAction(body);
     super.initState();
 
     controller =
@@ -29,6 +48,42 @@ class ApprovalActionState extends State<ApprovalAction>
     });
 
     controller.forward();
+  }
+
+  Future<void> _submitAction(body) async {
+    print('$body');
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final uri = Services.ApprovalStatus;
+
+    http.post(uri, body: body).then((response) {
+      var jsonResponse = jsonDecode(response.body);
+      // MyRequests myRequest = new MyRequests.fromJson(jsonResponse);
+      if (jsonResponse["StatusCode"] == 200) {
+        setState(() {
+          isLoading = false;
+        });
+
+        print("j&&& $jsonResponse");
+        Approval();
+      } else {
+        print("ModelError: ${jsonResponse["ModelErrors"]}");
+        if (jsonResponse["ModelErrors"] == 'Unauthorized') {
+          GetToken().getToken().then((value) {
+            Toast.show("Please try again!!", context,
+                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          });
+        } else {
+          Toast.show("Please check internet connection", context,
+              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          // .showSnackBar(
+          //     currentState   UIhelper.showSnackbars(jsonResponse["ModelErrors"]));
+        }
+      }
+    });
   }
 
   @override
@@ -122,14 +177,8 @@ class ApprovalActionState extends State<ApprovalAction>
                                       fontSize: 16.0),
                                 ),
                                 onPressed: () {
-                                  Navigator.pop(context);
-                                  // setState(() {
-                                  //   /* Route route = MaterialPageRoute(
-                                  //         builder: (context) => LoginScreen());
-                                  //     Navigator.pushReplacement(context, route);
-                                  //  */
-                                  // }
-                                  // );
+                                  Map body = widget.actionData;
+                                  _submitAction(body);
                                 },
                               ))),
                     ],

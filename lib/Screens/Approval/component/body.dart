@@ -4,8 +4,10 @@ import 'package:p2p/Screens/Approval/ApprovalDetails/approval-details.dart';
 import 'package:p2p/Screens/Approval/component/approvalPODO.dart';
 import 'package:p2p/Screens/HomePage/homePage.dart';
 import 'package:p2p/constants/AppConstant.dart';
+import 'package:p2p/constants/Network.dart';
 import 'package:p2p/constants/Services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:p2p/main.dart';
+import 'package:toast/toast.dart';
 import '../../../constants.dart';
 import 'package:http/http.dart' as http;
 import './background.dart';
@@ -18,10 +20,10 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   bool isLoading = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  SharedPreferences sharedPreferences;
-
   List<ResultObject> approvalList = new List();
-  int userID;
+  List p2PTypeId = List();
+  List businessUnitIds = List();
+  // int userID;
 
   @override
   void initState() {
@@ -30,71 +32,78 @@ class _BodyState extends State<Body> {
   }
 
   Future<void> _getApproveList() async {
-    try {
-      final uri = Services.ApprovalList;
-      approvalList.clear();
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      String token = sharedPreferences.getString(AppConstant.ACCESS_TOKEN);
-      int buID = sharedPreferences.getInt(AppConstant.BUSINESSID.toString());
-      int deprtID = sharedPreferences.getInt(AppConstant.DEPARTMENT.toString());
-      int userID = sharedPreferences.getInt(AppConstant.USER_ID.toString());
+    Network().check().then((intenet) async {
+      if (intenet != null && intenet) {
+        try {
+          final uri = Services.ApprovalList;
+          approvalList.clear();
+          var token = await globalMyLocalPrefes
+              .get(AppConstant.ACCESS_TOKEN.toString());
 
-      Map body = {
-        "UserId": 33,
-        "BusinessUnitId": 4,
-        "DepartmentId": 8,
-        "TokenKey": "f62e03da-0576-4da4-9d17-8460df471401"
-      };
+          var busiId =
+              await globalMyLocalPrefes.get(AppConstant.BUSINESSID.toString());
+          var deptId =
+              await globalMyLocalPrefes.get(AppConstant.DEPARTMENT.toString());
+          var userTd =
+              await globalMyLocalPrefes.get(AppConstant.USER_ID.toString());
 
-      print("Body::: $body");
-      print("uri: $uri");
-      http.post(uri, body: body).then((response) {
-        print("jsonResponse");
-        var jsonResponse = jsonDecode(response.body);
-        print("jsonResponse: $jsonResponse");
+          Map body = {
+            "UserId": userTd.toString(),
+            "BusinessUnitId": busiId.toString(),
+            "DepartmentId": deptId.toString(),
+            "TokenKey": token,
+            "P2PTypeId": p2PTypeId.toList(),
+            "BusinessUnitIds": businessUnitIds.toList(),
+          };
+          print("BODY: $body");
 
-        ApprovalList approveList = new ApprovalList.fromJson(jsonResponse);
-        if (jsonResponse["StatusCode"] == 200) {
-          setState(() {
-            approvalList = approveList.resultObject;
-
-            userID = sharedPreferences.getInt(AppConstant.USER_ID.toString());
-            isLoading = false;
+          http.post(uri, body: body).then((response) async {
+            if (response.statusCode == 200) {
+              var jsonResponse = jsonDecode(response.body);
+              print("Reponse---2 : $jsonResponse");
+              if (jsonResponse["StatusCode"] == 200) {
+                ApprovalList approveList =
+                    new ApprovalList.fromJson(jsonResponse);
+                setState(() {
+                  approvalList = approveList.resultObject;
+                  isLoading = false;
+                });
+              } else {
+                if (jsonResponse["ModelErrors"] == 'Unauthorized') {
+                  GetToken().getToken().then((value) {
+                    _getApproveList();
+                  });
+                  // _getNewsList();
+                  // Future<String> token = getToken();
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                  Toast.show(
+                      "Something went wrong.. Please try again later.", context,
+                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                }
+              }
+            } else {
+              print("response.statusCode.." + response.statusCode.toString());
+              Toast.show(
+                  "Something wnet wrong.. Please try again later.", context,
+                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+            }
           });
-        } else {
-          print("ModelError: ${jsonResponse["ModelErrors"]}");
-          if (jsonResponse["ModelErrors"] == 'Unauthorized') {
-            GetToken().getToken().then((value) {
-              _getApproveList();
-            });
-            // _getNewsList();
-            // Future<String> token = getToken();
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-            // currentState.showSnackBar(
-            //     UIhelper.showSnackbars(jsonResponse["ModelErrors"]));
-          }
+        } catch (e) {
+          print("Error: $e");
+          return (e);
         }
-      }).then((value) => print("werror"));
-    } catch (e) {
-      print("Err: $e");
-      return (e);
-    }
+      } else {
+        Navigator.pop(context);
+        Toast.show("Please check internet connection", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      }
+    });
   }
 
   void _goToDetails(BuildContext context1, approveData) {
-    // final body = json.decode(approveData);
-
-    // List results;
-    // setState(() {
-    //   var resBody = json.decode(approveData);
-    //   print('Response body: $resBody');
-    //   results = resBody;
-    // });
-
     String jsonUser = jsonEncode(approveData);
     print(jsonUser);
 
@@ -121,7 +130,7 @@ class _BodyState extends State<Body> {
                 height: 100,
                 width: 10,
                 decoration: new BoxDecoration(
-                  color: approvalList.title == "PROOHQS10167"
+                  color: approvalList.appStatus != "Pending"
                       ? Colors.grey
                       : Colors.orange,
                   borderRadius: BorderRadius.only(
@@ -137,19 +146,24 @@ class _BodyState extends State<Body> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        approvalList.title,
+                        approvalList.appNo,
                         style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        approvalList.desc,
-                        style: new TextStyle(),
+                      Flexible(
+                        child: RichText(
+                          overflow: TextOverflow.ellipsis,
+                          strutStyle: StrutStyle(fontSize: 12.0),
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              text: approvalList.title),
+                        ),
                       ),
                       Text(
                         'BU: ${approvalList.businessUnitName}',
                         style: new TextStyle(),
                       ),
                       Text(
-                        'Total: ${approvalList.totalAmount}',
+                        'Total: ${approvalList.totalAmount} ${approvalList.currencyName}',
                         style: new TextStyle(),
                       ),
                     ],

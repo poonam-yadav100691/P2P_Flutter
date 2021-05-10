@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:p2p/Screens/Login/login-page.dart';
 import 'package:p2p/constants.dart';
 import 'package:p2p/localization/localization_constants.dart';
+import 'package:p2p/main.dart';
 
 class LogoutOverlay extends StatefulWidget {
   @override
@@ -73,6 +74,7 @@ class LogoutOverlayState extends State<LogoutOverlay>
                         ),
                         onPressed: () {
                           setState(() {
+                            globalMyLocalPrefes.clear();
                             Route route = MaterialPageRoute(
                                 builder: (context) => LoginScreen());
                             Navigator.pushReplacement(context, route);

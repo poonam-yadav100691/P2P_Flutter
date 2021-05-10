@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:p2p/components/SideMenuCat.dart';
+import 'package:p2p/Screens/Approval/SideMenuCat.dart';
 import 'package:p2p/constants.dart';
 
 class NavDrawer extends StatelessWidget {

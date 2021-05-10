@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:p2p/Screens/Approval/ApprovalDetails/component/aprovHistoryPODO.dart';
 import 'package:p2p/constants.dart';
 import 'package:p2p/localization/localization_constants.dart';
 
-void openHistory(BuildContext context, Type notiList) {
+void openHistory(BuildContext context, ApproveHistory appData) {
   Size size = MediaQuery.of(context).size;
 
-  // showGeneralDialog(
-  //   context: context,
-  //   barrierLabel: "Hello there",
-  //   barrierDismissible: true,
-  //   transitionDuration: Duration(milliseconds: 200), //This is time
-  //   barrierColor: Colors.black.withOpacity(0.5), // Add this property is color
-  //   pageBuilder: (BuildContext context, Animation animation,
-  //       Animation secondaryAnimation) {
-  //     return Center(
-  //       child: Material(
-  //         borderRadius: BorderRadius.circular(9),
-  //         child: Container(
+  print("Data: ${appData.toString()}");
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -25,14 +16,6 @@ void openHistory(BuildContext context, Type notiList) {
             borderRadius: BorderRadius.circular(9.0)), //this right here
         child: Container(
           height: size.height * 0.7,
-          // decoration: new BoxDecoration(
-          //   color: Colors.white,
-          //   border: Border.all(
-          //     color: Colors.white,
-          //     width: 1,
-          //   ),
-          //   borderRadius: BorderRadius.circular(9),
-          // ),
           child: Container(
             padding: EdgeInsets.all(10),
             child: Column(
@@ -51,285 +34,81 @@ void openHistory(BuildContext context, Type notiList) {
                 ),
                 Expanded(
                   flex: 1,
-                  child: ListView(
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10.0),
-                        child: Container(
-                          decoration: new BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
+                  child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: appData.resultObject.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 10.0),
+                          child: Container(
+                            decoration: new BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(4),
                             ),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Phahithoun",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          backgroundColor: Colors.white),
-                                    ),
-                                    Text(
-                                      "24/02/2020 1:30 PM",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Row(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "Remarks : ",
-                                      ),
-                                      Flexible(
-                                        child: new Text(
-                                            "Text here..date appData.date appData date",
-                                            style: TextStyle(),
-                                            textAlign: TextAlign.left),
-                                      ),
+                                      appData.resultObject[index]
+                                                  .approverName !=
+                                              ""
+                                          ? Text(
+                                              appData.resultObject[index]
+                                                  .approverName,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  backgroundColor:
+                                                      Colors.white),
+                                            )
+                                          : Container(),
+                                      appData.resultObject[index]
+                                                  .approverName !=
+                                              ""
+                                          ? Text(
+                                              appData.resultObject[index]
+                                                  .appDateTime,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          : Container(),
                                     ],
                                   ),
-                                )
-                              ],
+                                  appData.resultObject[index].remarks != ""
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Remarks : ",
+                                              ),
+                                              Flexible(
+                                                child: new Text(
+                                                    appData.resultObject[index]
+                                                        .remarks,
+                                                    style: TextStyle(),
+                                                    textAlign: TextAlign.left),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container()
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Container(
-                          decoration: new BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Phahithoun",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          backgroundColor: Colors.white),
-                                    ),
-                                    Text(
-                                      "24/02/2020 1:30 PM",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Remarks : ",
-                                      ),
-                                      Flexible(
-                                        child: new Text(
-                                            "Text here..date appData.date appData date",
-                                            style: TextStyle(),
-                                            textAlign: TextAlign.left),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Container(
-                          decoration: new BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Phahithoun",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          backgroundColor: Colors.white),
-                                    ),
-                                    Text(
-                                      "24/02/2020 1:30 PM",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Remarks : ",
-                                      ),
-                                      Flexible(
-                                        child: new Text(
-                                            "Text here..date appData.date appData date",
-                                            style: TextStyle(),
-                                            textAlign: TextAlign.left),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Container(
-                          decoration: new BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Phahithoun",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          backgroundColor: Colors.white),
-                                    ),
-                                    Text(
-                                      "24/02/2020 1:30 PM",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Remarks : ",
-                                      ),
-                                      Flexible(
-                                        child: new Text(
-                                            "Text here..date appData.date appData date",
-                                            style: TextStyle(),
-                                            textAlign: TextAlign.left),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Container(
-                          decoration: new BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Phahithoun",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          backgroundColor: Colors.white),
-                                    ),
-                                    Text(
-                                      "24/02/2020 1:30 PM",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Remarks : ",
-                                      ),
-                                      Flexible(
-                                        child: new Text(
-                                            "Text here..date appData.date appData date",
-                                            style: TextStyle(),
-                                            textAlign: TextAlign.left),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                        );
+                      }),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

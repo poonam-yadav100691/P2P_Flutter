@@ -17,7 +17,7 @@ import 'package:p2p/constants/AppConstant.dart';
 import 'package:p2p/constants/Network.dart';
 import 'package:p2p/constants/Services.dart';
 import 'package:p2p/localization/localization_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:p2p/main.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -105,14 +105,13 @@ class _HomePageState extends State<HomePage> {
 }
 
 class GetToken {
-  SharedPreferences sharedPreferences;
+  // SharedPreferences sharedPreferences;
   Future<void> getToken() async {
     Network().check().then((intenet) async {
       if (intenet != null && intenet) {
-        sharedPreferences = await SharedPreferences.getInstance();
-        String username = sharedPreferences.getString(AppConstant.LoginGmailID);
-        String password = sharedPreferences.getString(AppConstant.PASSWORD);
-        String urname = sharedPreferences.getString(AppConstant.USERNAME);
+        String username =
+            globalMyLocalPrefes.getString(AppConstant.LoginGmailID);
+        String password = globalMyLocalPrefes.getString(AppConstant.PASSWORD);
 
         try {
           final uri = Services.LOGIN;
@@ -122,7 +121,7 @@ class GetToken {
             "UserPassword": password
           };
 
-          http.post(uri, body: body).then((response) {
+          http.post(uri, body: body).then((response) async {
             if (response.statusCode == 200) {
               var jsonResponse = jsonDecode(response.body);
               if (jsonResponse["StatusCode"] == 200) {
@@ -132,16 +131,19 @@ class GetToken {
                 print("login.tokenKey: ${login.tokenKey}");
                 print("userId---3 : ${login.userId}");
 
-                sharedPreferences.setInt(
+                await globalMyLocalPrefes.setInt(
                     AppConstant.USER_ID.toString(), login.userId);
 
-                sharedPreferences.setString(
+                await globalMyLocalPrefes.setString(
                     AppConstant.ACCESS_TOKEN, login.tokenKey);
-                sharedPreferences.setString(
+                await globalMyLocalPrefes.setString(
                     AppConstant.USERNAME, login.firstName);
-                sharedPreferences.setString(AppConstant.IMAGE, login.photoPath);
-                sharedPreferences.setString(AppConstant.PHONENO, login.mobile);
-                sharedPreferences.setString(AppConstant.EMAIL, login.email);
+                await globalMyLocalPrefes.setString(
+                    AppConstant.IMAGE, login.photoPath);
+                await globalMyLocalPrefes.setString(
+                    AppConstant.PHONENO, login.mobile);
+                await globalMyLocalPrefes.setString(
+                    AppConstant.EMAIL, login.email);
 
                 return login.tokenKey;
               } else {
