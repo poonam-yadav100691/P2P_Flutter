@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:p2p/Screens/Approval/ApprovalDetails/component/approveDetailsPODO.dart';
 import 'package:p2p/Screens/Approval/ApprovalDetails/component/aprovHistoryPODO.dart';
 import 'package:p2p/Screens/Approval/component/approvalPODO.dart';
@@ -10,7 +11,7 @@ import 'package:p2p/constants/Services.dart';
 import 'package:p2p/localization/localization_constants.dart';
 import 'package:p2p/main.dart';
 import 'package:p2p/utils/UIhelper.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:p2p/components/approvalAction.dart';
 import 'package:p2p/constants.dart';
@@ -55,11 +56,10 @@ class _BodyState extends State<Body> {
       "TokenKey": globalMyLocalPrefes.get(AppConstant.ACCESS_TOKEN)
     };
     Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ApprovalAction(
-                actionData: actionData,
-                actionText: actionText)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => ApprovalAction(
+                actionData: actionData, actionText: actionText)));
   }
 
   Widget _launchStatus(BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -505,10 +505,18 @@ class _BodyState extends State<Body> {
                                       if (resoneController.text != "") {
                                         takeAction("Approve", appData);
                                       } else {
-                                        Toast.show(
-                                            "Please enter remark..", context,
-                                            duration: Toast.LENGTH_LONG,
-                                            gravity: Toast.BOTTOM);
+                                        // Toast.show(
+                                        //     "Please enter remark..", context,
+                                        //     duration: Toast.LENGTH_LONG,
+                                        //     gravity: Toast.BOTTOM);
+                                        Fluttertoast.showToast(
+                                            msg: "Please enter remark..!!",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
                                       }
                                     },
                                     textColor: Colors.white,
@@ -527,10 +535,18 @@ class _BodyState extends State<Body> {
                                       if (resoneController.text != "") {
                                         takeAction("Reject", appData);
                                       } else {
-                                        Toast.show(
-                                            "Please enter remark..", context,
-                                            duration: Toast.LENGTH_LONG,
-                                            gravity: Toast.BOTTOM);
+                                        Fluttertoast.showToast(
+                                            msg: "Please enter remark..!!",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                        // Toast.show(
+                                        //     "Please enter remark..", context,
+                                        //     duration: Toast.LENGTH_LONG,
+                                        //     gravity: Toast.BOTTOM);
                                       }
                                     },
                                     textColor: Colors.white,
@@ -546,10 +562,14 @@ class _BodyState extends State<Body> {
                                       if (resoneController.text != "") {
                                         takeAction("Hold", appData);
                                       } else {
-                                        Toast.show(
-                                            "Please enter remark..", context,
-                                            duration: Toast.LENGTH_LONG,
-                                            gravity: Toast.BOTTOM);
+                                        Fluttertoast.showToast(
+                                            msg: "Please enter remark..!!",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
                                       }
                                     },
                                     textColor: Colors.white,
@@ -580,7 +600,6 @@ class _BodyState extends State<Body> {
     Network().check().then((intenet) async {
       if (intenet != null && intenet) {
         try {
-          final uri = Services.ApprovalDetails;
           approvalDetailsRst.clear();
           var token = await globalMyLocalPrefes
               .get(AppConstant.ACCESS_TOKEN.toString());
@@ -594,7 +613,8 @@ class _BodyState extends State<Body> {
           };
           print("BODY2: $body");
 
-          http.post(uri, body: body).then((response) async {
+          final uri = Services.ApprovalDetails;
+          http.post(Uri.parse(uri), body: body).then((response) async {
             if (response.statusCode == 200) {
               var jsonResponse = jsonDecode(response.body);
               print("Re222 : ${jsonResponse["ResultObject"]}");
@@ -640,8 +660,14 @@ class _BodyState extends State<Body> {
         isLoading = false;
 
         Navigator.pop(context);
-        Toast.show("Please check internet connection", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Fluttertoast.showToast(
+            msg: "Please check internet connection!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     });
   }
@@ -667,7 +693,7 @@ class _BodyState extends State<Body> {
           };
           print("BODY: $body");
 
-          http.post(uri, body: body).then((response) async {
+          http.post(Uri.parse(uri), body: body).then((response) async {
             if (response.statusCode == 200) {
               var jsonResponse = jsonDecode(response.body);
               print("Reponse---2 : $jsonResponse");
@@ -680,8 +706,14 @@ class _BodyState extends State<Body> {
                       new ApproveHistory.fromJson(jsonResponse);
                   openHistory(context, approveHistList);
                 } else {
-                  Toast.show("No Data Found!!", context,
-                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                  Fluttertoast.showToast(
+                      msg: "No Data Found!!",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                 }
               } else {
                 setState(() {
@@ -719,8 +751,14 @@ class _BodyState extends State<Body> {
         }
       } else {
         Navigator.pop(context);
-        Toast.show("Please check internet connection", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Fluttertoast.showToast(
+            msg: "Please check internet connection!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     });
   }

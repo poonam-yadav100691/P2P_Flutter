@@ -6,10 +6,8 @@ import 'package:p2p/main.dart';
 import 'package:p2p/routes/route_names.dart';
 import '../../../constants.dart';
 import './background.dart';
-
-import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+// import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -39,17 +37,17 @@ class _BodyState extends State<Body> {
   var data = [0.0, 1.0, 1.5, 2.0, 0.0, 0.0, -0.5, -1.0, -0.5, 0.0, 0.0];
   var data1 = [0.0, -2.0, 3.5, -2.0, 0.5, 0.7, 0.8, 1.0, 2.0, 3.0, 3.2];
 
-  List<CircularStackEntry> circularData = <CircularStackEntry>[
-    new CircularStackEntry(
-      <CircularSegmentEntry>[
-        new CircularSegmentEntry(700.0, Color(0xff4285F4), rankKey: 'Q1'),
-        new CircularSegmentEntry(100.0, Color(0xfff3af00), rankKey: 'Q2'),
-        new CircularSegmentEntry(1800.0, Color(0xffec3337), rankKey: 'Q3'),
-        new CircularSegmentEntry(1000.0, Color(0xff40b24b), rankKey: 'Q4'),
-      ],
-      rankKey: 'Quarterly Profits',
-    ),
-  ];
+  // List<CircularStackEntry> circularData = <CircularStackEntry>[
+  //   new CircularStackEntry(
+  //     <CircularSegmentEntry>[
+  //       new CircularSegmentEntry(700.0, Color(0xff4285F4), rankKey: 'Q1'),
+  //       new CircularSegmentEntry(100.0, Color(0xfff3af00), rankKey: 'Q2'),
+  //       new CircularSegmentEntry(1800.0, Color(0xffec3337), rankKey: 'Q3'),
+  //       new CircularSegmentEntry(1000.0, Color(0xff40b24b), rankKey: 'Q4'),
+  //     ],
+  //     rankKey: 'Quarterly Profits',
+  //   ),
+  // ];
 
   Material myTextItems(String title, String usaPrice, String thaiPrice) {
     Size size = MediaQuery.of(context).size;
@@ -155,23 +153,15 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                   ),
+
                   // Padding(
-                  //   padding: EdgeInsets.all(8.0),
-                  //   child: Text(
-                  //     subtitle,
-                  //     style: TextStyle(
-                  //       fontSize: 30.0,
-                  //     ),
+                  //   padding: EdgeInsets.all(0.0),
+                  //   child: AnimatedCircularChart(
+                  //     size: const Size(170.0, 170.0),
+                  //     initialChartData: circularData,
+                  //     chartType: CircularChartType.Pie,
                   //   ),
                   // ),
-                  Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: AnimatedCircularChart(
-                      size: const Size(170.0, 170.0),
-                      initialChartData: circularData,
-                      chartType: CircularChartType.Pie,
-                    ),
-                  ),
                 ],
               ),
             ],
@@ -181,132 +171,132 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Material mychart1Items(String title, String priceVal, String subtitle) {
-    return Material(
-      color: Colors.white,
-      elevation: 14.0,
-      borderRadius: BorderRadius.circular(24.0),
-      shadowColor: Color(0x802196F3),
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.blueAccent,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: Text(
-                      priceVal,
-                      style: TextStyle(
-                        fontSize: 30.0,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: new Sparkline(
-                      data: data,
-                      lineColor: Color(0xffff6101),
-                      pointsMode: PointsMode.all,
-                      pointSize: 8.0,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Material mychart1Items(String title, String priceVal, String subtitle) {
+  //   return Material(
+  //     color: Colors.white,
+  //     elevation: 14.0,
+  //     borderRadius: BorderRadius.circular(24.0),
+  //     shadowColor: Color(0x802196F3),
+  //     child: Center(
+  //       child: Padding(
+  //         padding: EdgeInsets.all(8.0),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: <Widget>[
+  //             Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: <Widget>[
+  //                 Padding(
+  //                   padding: EdgeInsets.all(1.0),
+  //                   child: Text(
+  //                     title,
+  //                     style: TextStyle(
+  //                       fontSize: 20.0,
+  //                       color: Colors.blueAccent,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Padding(
+  //                   padding: EdgeInsets.all(1.0),
+  //                   child: Text(
+  //                     priceVal,
+  //                     style: TextStyle(
+  //                       fontSize: 30.0,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Padding(
+  //                   padding: EdgeInsets.all(1.0),
+  //                   child: Text(
+  //                     subtitle,
+  //                     style: TextStyle(
+  //                       fontSize: 20.0,
+  //                       color: Colors.blueGrey,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Padding(
+  //                   padding: EdgeInsets.all(1.0),
+  //                   child: new Sparkline(
+  //                     data: data,
+  //                     lineColor: Color(0xffff6101),
+  //                     pointsMode: PointsMode.all,
+  //                     pointSize: 8.0,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Material mychart2Items(String title, String priceVal, String subtitle) {
-    return Material(
-      color: Colors.white,
-      elevation: 14.0,
-      borderRadius: BorderRadius.circular(24.0),
-      shadowColor: Color(0x802196F3),
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.blueAccent,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: Text(
-                      priceVal,
-                      style: TextStyle(
-                        fontSize: 30.0,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: new Sparkline(
-                      data: data1,
-                      fillMode: FillMode.below,
-                      fillGradient: new LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.amber[800], Colors.amber[200]],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Material mychart2Items(String title, String priceVal, String subtitle) {
+  //   return Material(
+  //     color: Colors.white,
+  //     elevation: 14.0,
+  //     borderRadius: BorderRadius.circular(24.0),
+  //     shadowColor: Color(0x802196F3),
+  //     child: Center(
+  //       child: Padding(
+  //         padding: EdgeInsets.all(8.0),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: <Widget>[
+  //             Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: <Widget>[
+  //                 Padding(
+  //                   padding: EdgeInsets.all(1.0),
+  //                   child: Text(
+  //                     title,
+  //                     style: TextStyle(
+  //                       fontSize: 20.0,
+  //                       color: Colors.blueAccent,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Padding(
+  //                   padding: EdgeInsets.all(1.0),
+  //                   child: Text(
+  //                     priceVal,
+  //                     style: TextStyle(
+  //                       fontSize: 30.0,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Padding(
+  //                   padding: EdgeInsets.all(1.0),
+  //                   child: Text(
+  //                     subtitle,
+  //                     style: TextStyle(
+  //                       fontSize: 20.0,
+  //                       color: Colors.blueGrey,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Padding(
+  //                   padding: EdgeInsets.all(1.0),
+  //                   child: new Sparkline(
+  //                     data: data1,
+  //                     fillMode: FillMode.below,
+  //                     fillGradient: new LinearGradient(
+  //                       begin: Alignment.topCenter,
+  //                       end: Alignment.bottomCenter,
+  //                       colors: [Colors.amber[800], Colors.amber[200]],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void _changeLanguage(Language language) async {
     Locale _locale = await setLocale(language.languageCode);

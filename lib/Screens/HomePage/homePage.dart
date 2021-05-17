@@ -10,8 +10,6 @@ import 'package:p2p/Screens/Dashboard/dashboard-page.dart';
 import 'package:p2p/Screens/Login/component/loginResponse.dart';
 import 'package:p2p/classes/MyConnectivity.dart';
 import 'package:p2p/constants.dart';
-
-import 'package:connectivity/connectivity.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:p2p/constants/AppConstant.dart';
 import 'package:p2p/constants/Network.dart';
@@ -27,31 +25,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Map _source = {ConnectivityResult.none: false};
-  MyConnectivity _connectivity = MyConnectivity.instance;
+  // Map _source = {ConnectivityResult.none: false};
+  // MyConnectivity _connectivity = MyConnectivity.instance;
 
   @override
   void initState() {
     super.initState();
-    _connectivity.initialise();
-    _connectivity.myStream.listen((source) {
-      setState(() => _source = source);
-    });
+    // _connectivity.initialise();
+    // _connectivity.myStream.listen((source) {
+    //   setState(() => _source = source);
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     String string;
-    switch (_source.keys.toList()[0]) {
-      case ConnectivityResult.none:
-        string = "Offline";
-        break;
-      case ConnectivityResult.mobile:
-        string = "Mobile: Online";
-        break;
-      case ConnectivityResult.wifi:
-        string = "WiFi: Online";
-    }
+    // switch (_source.keys.toList()[0]) {
+    //   case ConnectivityResult.none:
+    //     string = "Offline";
+    //     break;
+    //   case ConnectivityResult.mobile:
+    //     string = "Mobile: Online";
+    //     break;
+    //   case ConnectivityResult.wifi:
+    //     string = "WiFi: Online";
+    // }
 
     return Align(
         alignment: Alignment.bottomLeft, // and bottomLeft
@@ -99,7 +97,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _connectivity.disposeStream();
+    // _connectivity.disposeStream();
     super.dispose();
   }
 }
@@ -121,7 +119,7 @@ class GetToken {
             "UserPassword": password
           };
 
-          http.post(uri, body: body).then((response) async {
+          http.post(Uri.parse(uri), body: body).then((response) async {
             if (response.statusCode == 200) {
               var jsonResponse = jsonDecode(response.body);
               if (jsonResponse["StatusCode"] == 200) {
@@ -138,13 +136,12 @@ class GetToken {
                     AppConstant.ACCESS_TOKEN, login.tokenKey);
                 await globalMyLocalPrefes.setString(
                     AppConstant.USERNAME, login.firstName);
-                await globalMyLocalPrefes.setString(
-                    AppConstant.IMAGE, login.photoPath);
-                await globalMyLocalPrefes.setString(
-                    AppConstant.PHONENO, login.mobile);
+                await globalMyLocalPrefes.setString(AppConstant.IMAGE,
+                    login.photoPath == null ? "null" : login.photoPath);
+                await globalMyLocalPrefes.setString(AppConstant.PHONENO,
+                    login.mobile == null ? "null" : login.mobile);
                 await globalMyLocalPrefes.setString(
                     AppConstant.EMAIL, login.email);
-
                 return login.tokenKey;
               } else {
                 return "Something wnet wrong.. Please try again later.";

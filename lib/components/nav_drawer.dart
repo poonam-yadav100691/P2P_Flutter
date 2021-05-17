@@ -30,10 +30,11 @@ class NavDrawer extends StatelessWidget {
                 child: SideMenuCat(),
               ),
             ),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () => {getDate()},
-              textColor: Colors.white,
-              padding: const EdgeInsets.all(0.0),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.orange)),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),

@@ -7,7 +7,8 @@ import 'package:p2p/Screens/HomePage/homePage.dart';
 import 'package:p2p/constants.dart';
 import 'package:p2p/constants/Services.dart';
 import 'package:p2p/localization/localization_constants.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ApprovalAction extends StatefulWidget {
   final String actionText;
@@ -57,9 +58,9 @@ class _ApprovalActionState extends State<ApprovalAction>
       isLoading = true;
     });
 
-    final uri = Services.ApprovalStatus;
+    String uri = Services.ApprovalStatus;
 
-    http.post(uri, body: body).then((response) {
+    http.post(Uri.parse(uri), body: body).then((response) {
       var jsonResponse = jsonDecode(response.body);
       // MyRequests myRequest = new MyRequests.fromJson(jsonResponse);
       if (jsonResponse["StatusCode"] == 200) {
@@ -73,12 +74,29 @@ class _ApprovalActionState extends State<ApprovalAction>
         print("ModelError: ${jsonResponse["ModelErrors"]}");
         if (jsonResponse["ModelErrors"] == 'Unauthorized') {
           GetToken().getToken().then((value) {
-            Toast.show("Please try again!!", context,
-                duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+            Fluttertoast.showToast(
+                msg: "Please try again!!",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
+
+            // Toast.show("Please try again!!", context,
+            //     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           });
         } else {
-          Toast.show("Please check internet connection", context,
-              duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+          Fluttertoast.showToast(
+              msg: "Please check internet connection!!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          // Toast.show("Please check internet connection", context,
+          //     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           // .showSnackBar(
           //     currentState   UIhelper.showSnackbars(jsonResponse["ModelErrors"]));
         }

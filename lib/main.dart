@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'localization/demo_localization.dart';
 
 SharedPreferences globalMyLocalPrefes;
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {

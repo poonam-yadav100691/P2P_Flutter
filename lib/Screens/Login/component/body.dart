@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:p2p/Screens/Login/component/loginResponse.dart';
 import 'package:p2p/components/forgetPassword.dart';
 import 'package:p2p/constants.dart';
@@ -12,7 +12,7 @@ import 'package:p2p/localization/localization_constants.dart';
 import 'package:p2p/main.dart';
 import 'package:p2p/routes/route_names.dart';
 import 'package:p2p/utils/UIhelper.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
 import './background.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,6 +24,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   String _email, _password;
   String _errorMessage = "";
+  bool isLoading = false;
   final focus = FocusNode();
   final TextEditingController usernameController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
@@ -46,22 +47,26 @@ class _BodyState extends State<Body> {
         // sharedPreferences = await SharedPreferences.getInstance();
 
         try {
+          setState(() {
+            isLoading = true;
+          });
           final uri = Services.LOGIN;
           Map body = {
             "PassKey": "a486f489-76c0-4c49-8ff0-d0fdec0a162b",
             "UserName": usernameController.text.trim(),
-            "UserPassword": passwordController.text.trim()
+            "UserPassword": passwordController.text.trim(),
+            "TokenDevice": "test string"
           };
           print("BODY: $body");
 
-          http.post(uri, body: body).then((response) async {
+          http.post(Uri.parse(uri), body: body).then((response) async {
             if (response.statusCode == 200) {
               var jsonResponse = jsonDecode(response.body);
               print("Reponse---2 : $jsonResponse");
               if (jsonResponse["StatusCode"] == 200) {
                 ResultObject login =
                     new ResultObject.fromJson(jsonResponse["ResultObject"][0]);
-                // print(login.toString());
+
                 print("login.tokenKey: ${login.tokenKey}");
                 await globalMyLocalPrefes.setInt(
                     AppConstant.USER_ID.toString(), login.userId);
@@ -75,10 +80,10 @@ class _BodyState extends State<Body> {
                     AppConstant.ACCESS_TOKEN, login.tokenKey);
                 await globalMyLocalPrefes.setString(
                     AppConstant.USERNAME, login.firstName);
-                await globalMyLocalPrefes.setString(
-                    AppConstant.IMAGE, login.photoPath);
-                await globalMyLocalPrefes.setString(
-                    AppConstant.PHONENO, login.mobile);
+                await globalMyLocalPrefes.setString(AppConstant.IMAGE,
+                    login.photoPath == null ? "null" : login.photoPath);
+                await globalMyLocalPrefes.setString(AppConstant.PHONENO,
+                    login.mobile == null ? "null" : login.mobile);
                 await globalMyLocalPrefes.setString(
                     AppConstant.EMAIL, login.email);
                 await globalMyLocalPrefes.setString(
@@ -88,29 +93,52 @@ class _BodyState extends State<Body> {
 
                 // sharedPreferences.setString(AppConstant.EMP_ID, login.emp_no);
 //  Navigator.pushReplacementNamed(context, homeRoute);
+                setState(() {
+                  isLoading = false;
+                });
                 Navigator.pushNamedAndRemoveUntil(
                     context, homeRoute, ModalRoute.withName(homeRoute));
               } else {
+                setState(() {
+                  isLoading = false;
+                });
                 _scaffoldKey.currentState.showSnackBar(UIhelper.showSnackbars(
                     "Something wnet wrong.. Please try again later."));
               }
             } else {
               print("response.statusCode.." + response.statusCode.toString());
-
+              setState(() {
+                isLoading = false;
+              });
               _scaffoldKey.currentState.showSnackBar(UIhelper.showSnackbars(
                   "Something wnet wrong.. Please try again later."));
             }
           });
         } catch (e) {
+          setState(() {
+            isLoading = false;
+          });
           print("Error: $e");
           return (e);
         }
       } else {
         Navigator.pop(context);
-        Toast.show("Please check internet connection", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Fluttertoast.showToast(
+            msg: "Please check internet connection.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     });
+  }
+
+  @override
+  void initState() {
+    isLoading = false;
+    super.initState();
   }
 
   @override
@@ -124,136 +152,142 @@ class _BodyState extends State<Body> {
     return new Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        resizeToAvoidBottomPadding: true,
-        body: Background(
-          child: SingleChildScrollView(
-              child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // SizedBox(height: size.height * 0.03),
-                Image.asset(
-                  "assets/images/logo-pa.png",
-                  height: size.height * 0.25,
-                  width: 250,
-                ),
-                // SizedBox(height: size.height * 0.03),
+        body: isLoading
+            ? Container(
+                color: Colors.black87,
+                child: Center(child: CircularProgressIndicator()))
+            : Background(
+                child: SingleChildScrollView(
+                    child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      // SizedBox(height: size.height * 0.03),
+                      Image.asset(
+                        "assets/images/logo-pa.png",
+                        height: size.height * 0.25,
+                        width: 250,
+                      ),
+                      // SizedBox(height: size.height * 0.03),
 
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                  width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(29),
-                    border: Border.all(
-                      color: kGreyLightColor,
-                      width: 1,
-                    ),
-                  ),
-                  child: TextFormField(
-                    textInputAction: TextInputAction.next,
-                    autofocus: true,
-                    maxLength: 30,
-                    controller: usernameController,
-                    buildCounter: (BuildContext context,
-                            {int currentLength,
-                            int maxLength,
-                            bool isFocused}) =>
-                        null,
-                    decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.email_rounded,
-                          color: kOrangeColor,
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                        width: size.width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(29),
+                          border: Border.all(
+                            color: kGreyLightColor,
+                            width: 1,
+                          ),
                         ),
-                        // hintText: hintText,
-                        border: InputBorder.none,
-                        hintText: getTranslated(context, "YourEmail"),
-                        hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 15.0)),
-                    validator: (value) =>
-                        value.isEmpty ? 'Email Id can\'t be empty' : null,
-                    onSaved: (value) => _email = value.trim(),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                  width: size.width * 0.8,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(29),
-                    border: Border.all(
-                      color: kGreyLightColor,
-                      width: 1,
-                    ),
-                  ),
-                  child: TextFormField(
-                    obscureText: true,
-                    cursorColor: kPrimaryColor,
-                    decoration: InputDecoration(
-                      hintText: getTranslated(context, "Password"),
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 15.0),
-                      icon: Icon(
-                        Icons.vpn_key,
-                        color: kPrimaryColor,
+                        child: TextFormField(
+                          textInputAction: TextInputAction.next,
+                          autofocus: true,
+                          maxLength: 30,
+                          controller: usernameController,
+                          buildCounter: (BuildContext context,
+                                  {int currentLength,
+                                  int maxLength,
+                                  bool isFocused}) =>
+                              null,
+                          decoration: InputDecoration(
+                              icon: Icon(
+                                Icons.email_rounded,
+                                color: kOrangeColor,
+                              ),
+                              // hintText: hintText,
+                              border: InputBorder.none,
+                              hintText: getTranslated(context, "YourEmail"),
+                              hintStyle: TextStyle(
+                                  color: Colors.grey, fontSize: 15.0)),
+                          validator: (value) =>
+                              value.isEmpty ? 'Email Id can\'t be empty' : null,
+                          onSaved: (value) => _email = value.trim(),
+                        ),
                       ),
-                      border: InputBorder.none,
-                    ),
-                    controller: passwordController,
-                    autofocus: true,
-                    maxLength: 20,
-                    focusNode: focus,
-                    validator: (value) =>
-                        value.isEmpty ? 'Password can\'t be empty' : null,
-                    onSaved: (value) => _password = value,
-                  ),
-                ),
-                // RoundedButton(
-                //   text: getTranslated(context, "Login"),
-                //   press: () {
-                //     Navigator.pushReplacementNamed(context, homeRoute);
-                //   },
-                // ),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                        width: size.width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(29),
+                          border: Border.all(
+                            color: kGreyLightColor,
+                            width: 1,
+                          ),
+                        ),
+                        child: TextFormField(
+                          obscureText: true,
+                          cursorColor: kPrimaryColor,
+                          decoration: InputDecoration(
+                            hintText: getTranslated(context, "Password"),
+                            hintStyle:
+                                TextStyle(color: Colors.grey, fontSize: 15.0),
+                            icon: Icon(
+                              Icons.vpn_key,
+                              color: kPrimaryColor,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                          controller: passwordController,
+                          autofocus: true,
+                          maxLength: 20,
+                          focusNode: focus,
+                          validator: (value) =>
+                              value.isEmpty ? 'Password can\'t be empty' : null,
+                          onSaved: (value) => _password = value,
+                        ),
+                      ),
+                      // RoundedButton(
+                      //   text: getTranslated(context, "Login"),
+                      //   press: () {
+                      //     Navigator.pushReplacementNamed(context, homeRoute);
+                      //   },
+                      // ),
 
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  width: size.width * 0.8,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: FlatButton.icon(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 13, horizontal: 0),
-                      color: kPrimaryColor,
-                      onPressed: () {
-                        _handleSubmitted();
-                      },
-                      icon: Icon(
-                        Icons.arrow_forward,
-                        color: kWhiteColor,
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        width: size.width * 0.8,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: FlatButton.icon(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 13, horizontal: 0),
+                            color: kPrimaryColor,
+                            onPressed: () {
+                              _handleSubmitted();
+                            },
+                            icon: Icon(
+                              Icons.arrow_forward,
+                              color: kWhiteColor,
+                            ),
+                            label: Text(
+                              getTranslated(context, "Login"),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
                       ),
-                      label: Text(
-                        getTranslated(context, "Login"),
-                        style: TextStyle(color: Colors.white),
+                      SizedBox(height: size.height * 0.02),
+                      ForgetPassword(
+                        press: () {
+                          Navigator.pushReplacementNamed(context, homeRoute);
+                        },
                       ),
-                    ),
+                      // SizedBox(height: size.height * 0.01),
+                      Image.asset(
+                        "assets/images/login-bg.png",
+                        height: size.height * 0.40,
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                ForgetPassword(
-                  press: () {
-                    Navigator.pushReplacementNamed(context, homeRoute);
-                  },
-                ),
-                // SizedBox(height: size.height * 0.01),
-                Image.asset(
-                  "assets/images/login-bg.png",
-                  height: size.height * 0.40,
-                ),
-              ],
-            ),
-          )),
-        ));
+                )),
+              ));
   }
 }

@@ -50,6 +50,7 @@ class ResultObject {
   int departmentId;
   int businessUnitId;
   String tokenKey;
+  String tokenDevice;
 
   ResultObject(
       {this.userId,
@@ -62,7 +63,8 @@ class ResultObject {
       this.employeeId,
       this.departmentId,
       this.businessUnitId,
-      this.tokenKey});
+      this.tokenKey,
+      this.tokenDevice});
 
   ResultObject.fromJson(Map<String, dynamic> json) {
     userId = json['UserId'];
@@ -76,6 +78,7 @@ class ResultObject {
     departmentId = json['DepartmentId'];
     businessUnitId = json['BusinessUnitId'];
     tokenKey = json['TokenKey'];
+    tokenDevice = json['TokenDevice'];
   }
 
   Map<String, dynamic> toJson() {
@@ -91,6 +94,8 @@ class ResultObject {
     data['DepartmentId'] = this.departmentId;
     data['BusinessUnitId'] = this.businessUnitId;
     data['TokenKey'] = this.tokenKey;
+    data['TokenDevice'] = this.tokenDevice;
+
     return data;
   }
 }

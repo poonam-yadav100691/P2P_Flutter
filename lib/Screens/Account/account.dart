@@ -78,7 +78,6 @@ class _AccountState extends State<Account> {
         ],
       ),
       body: Body(),
-      resizeToAvoidBottomPadding: true,
     );
   }
 }

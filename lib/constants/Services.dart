@@ -6,4 +6,5 @@ class Services {
   static final String ApprovalHistory = BASE_URL + 'Approve/ApprovalHistory';
   static final String ApprovalStatus = BASE_URL + 'Approve/Approval';
   static final String ApprovalDetails = BASE_URL + 'Approve/ApprovalListDetail';
+  static final String FilterData = BASE_URL + 'Approve/getDataFilter';
 }

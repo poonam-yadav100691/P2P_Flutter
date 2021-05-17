@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import 'package:p2p/Screens/Approval/ApprovalDetails/approval-details.dart';
 import 'package:p2p/Screens/Approval/component/approvalPODO.dart';
@@ -7,7 +8,7 @@ import 'package:p2p/constants/AppConstant.dart';
 import 'package:p2p/constants/Network.dart';
 import 'package:p2p/constants/Services.dart';
 import 'package:p2p/main.dart';
-import 'package:toast/toast.dart';
+// import 'package:toast/toast.dart';
 import '../../../constants.dart';
 import 'package:http/http.dart' as http;
 import './background.dart';
@@ -20,9 +21,9 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   bool isLoading = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<ResultObject> approvalList = new List();
-  List p2PTypeId = List();
-  List businessUnitIds = List();
+  List<ResultObject> approvalList = [];
+  List p2PTypeId = [];
+  List businessUnitIds = [];
   // int userID;
 
   @override
@@ -47,7 +48,7 @@ class _BodyState extends State<Body> {
           var userTd =
               await globalMyLocalPrefes.get(AppConstant.USER_ID.toString());
 
-          Map body = {
+          Map<String, dynamic> body = {
             "UserId": userTd.toString(),
             "BusinessUnitId": busiId.toString(),
             "DepartmentId": deptId.toString(),
@@ -55,40 +56,44 @@ class _BodyState extends State<Body> {
             "P2PTypeId": p2PTypeId.toList(),
             "BusinessUnitIds": businessUnitIds.toList(),
           };
+          Map<String, String> headers = {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+          };
           print("BODY: $body");
 
-          http.post(uri, body: body).then((response) async {
-            if (response.statusCode == 200) {
-              var jsonResponse = jsonDecode(response.body);
-              print("Reponse---2 : $jsonResponse");
-              if (jsonResponse["StatusCode"] == 200) {
-                ApprovalList approveList =
-                    new ApprovalList.fromJson(jsonResponse);
+          http
+              .post(Uri.parse(uri), body: json.encode(body), headers: headers)
+              .then((response) async {
+            var jsonResponse = jsonDecode(response.body);
+            print("Reponse---2 : $jsonResponse");
+            if (jsonResponse["StatusCode"] == 200) {
+              ApprovalList approveList =
+                  new ApprovalList.fromJson(jsonResponse);
+              setState(() {
+                approvalList = approveList.resultObject;
+                isLoading = false;
+              });
+            } else {
+              if (jsonResponse["ModelErrors"] == 'Unauthorized') {
+                GetToken().getToken().then((value) {
+                  _getApproveList();
+                });
+                // _getNewsList();
+                // Future<String> token = getToken();
+              } else {
                 setState(() {
-                  approvalList = approveList.resultObject;
                   isLoading = false;
                 });
-              } else {
-                if (jsonResponse["ModelErrors"] == 'Unauthorized') {
-                  GetToken().getToken().then((value) {
-                    _getApproveList();
-                  });
-                  // _getNewsList();
-                  // Future<String> token = getToken();
-                } else {
-                  setState(() {
-                    isLoading = false;
-                  });
-                  Toast.show(
-                      "Something went wrong.. Please try again later.", context,
-                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                }
+                Fluttertoast.showToast(
+                    msg: "Something went wrong.. Please try again later.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
               }
-            } else {
-              print("response.statusCode.." + response.statusCode.toString());
-              Toast.show(
-                  "Something wnet wrong.. Please try again later.", context,
-                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
             }
           });
         } catch (e) {
@@ -97,8 +102,14 @@ class _BodyState extends State<Body> {
         }
       } else {
         Navigator.pop(context);
-        Toast.show("Please check internet connection", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Fluttertoast.showToast(
+            msg: "Please check internet connection.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     });
   }
