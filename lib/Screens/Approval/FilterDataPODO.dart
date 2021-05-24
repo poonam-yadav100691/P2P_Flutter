@@ -1,6 +1,6 @@
 class FilterData {
   String modelErrors;
-  List<ResultObject> resultObject;
+  List<FilterResultObject> resultObject;
   int statusCode;
   bool isSuccess;
   String commonErrors;
@@ -15,9 +15,9 @@ class FilterData {
   FilterData.fromJson(Map<String, dynamic> json) {
     modelErrors = json['ModelErrors'];
     if (json['ResultObject'] != null) {
-      resultObject = new List<ResultObject>();
+      resultObject = <FilterResultObject>[];
       json['ResultObject'].forEach((v) {
-        resultObject.add(new ResultObject.fromJson(v));
+        resultObject.add(new FilterResultObject.fromJson(v));
       });
     }
     statusCode = json['StatusCode'];
@@ -38,13 +38,13 @@ class FilterData {
   }
 }
 
-class ResultObject {
+class FilterResultObject {
   List<P2PType> p2PType;
   List<BusinessUnit> businessUnit;
 
-  ResultObject({this.p2PType, this.businessUnit});
+  FilterResultObject({this.p2PType, this.businessUnit});
 
-  ResultObject.fromJson(Map<String, dynamic> json) {
+  FilterResultObject.fromJson(Map<String, dynamic> json) {
     if (json['P2PType'] != null) {
       p2PType = <P2PType>[];
       json['P2PType'].forEach((v) {

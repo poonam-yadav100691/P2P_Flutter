@@ -48,7 +48,9 @@ class ResultObject {
   int userTypeId;
   int employeeId;
   int departmentId;
+  String departmentName;
   int businessUnitId;
+  String businessUnitName;
   String tokenKey;
   String tokenDevice;
 
@@ -62,7 +64,9 @@ class ResultObject {
       this.userTypeId,
       this.employeeId,
       this.departmentId,
+      this.departmentName,
       this.businessUnitId,
+      this.businessUnitName,
       this.tokenKey,
       this.tokenDevice});
 
@@ -76,7 +80,9 @@ class ResultObject {
     userTypeId = json['UserTypeId'];
     employeeId = json['EmployeeId'];
     departmentId = json['DepartmentId'];
+    departmentName = json['DepartmentName'];
     businessUnitId = json['BusinessUnitId'];
+    businessUnitName = json['BusinessUnitName'];
     tokenKey = json['TokenKey'];
     tokenDevice = json['TokenDevice'];
   }
@@ -92,10 +98,11 @@ class ResultObject {
     data['UserTypeId'] = this.userTypeId;
     data['EmployeeId'] = this.employeeId;
     data['DepartmentId'] = this.departmentId;
+    data['DepartmentName'] = this.departmentName;
     data['BusinessUnitId'] = this.businessUnitId;
+    data['BusinessUnitName'] = this.businessUnitName;
     data['TokenKey'] = this.tokenKey;
     data['TokenDevice'] = this.tokenDevice;
-
     return data;
   }
 }

@@ -8,6 +8,7 @@ import 'package:p2p/constants/Network.dart';
 import 'package:p2p/constants/Services.dart';
 import 'package:http/http.dart' as http;
 import 'package:p2p/main.dart';
+import 'package:p2p/routes/route_names.dart';
 
 class SideMenuCat extends StatefulWidget {
   SideMenuCat();
@@ -20,7 +21,7 @@ class _SideMenuCatState extends State<SideMenuCat> {
   List selecteCategorys = [];
   List selecteP2PType = [];
 
-  List<ResultObject> filterDataList = [];
+  List<FilterResultObject> filterDataList = [];
   List<P2PType> P2pType = [];
   List<BusinessUnit> _buCategories = [];
   bool isLoading = true;
@@ -125,113 +126,131 @@ class _SideMenuCatState extends State<SideMenuCat> {
     _getFilterList();
   }
 
+  void getDate() => {Navigator.pop(context, approvalRoute)};
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 8.0),
-        padding: EdgeInsets.all(0.0),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey[300],
-            width: 1.5,
+    if (!isLoading) {
+      return Center(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 8.0),
+          padding: EdgeInsets.all(0.0),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey[300],
+              width: 1.5,
+            ),
+            borderRadius: BorderRadius.circular(12),
           ),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 18,
-              margin: EdgeInsets.fromLTRB(0, 8, 0, 8.0),
-              padding: EdgeInsets.all(0.0),
-              child: Text(
-                "Type",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500),
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                padding: EdgeInsets.all(0.0),
+                child: Text(
+                  "Type",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: ListView.builder(
-                itemCount: P2pType.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    // margin: EdgeInsets.fromLTRB(0, 8, 0, 8.0),
-
-                    height: 40,
-                    child: CheckboxListTile(
-                      value: selecteP2PType.contains(P2pType[index].typeId),
-                      onChanged: (bool selected) {
-                        _onCategorySelected(
-                            selected, P2pType[index].typeId, "P2pType");
-                      },
-                      title: Text(P2pType[index].typeName,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w400)),
-                      secondary: const Icon(
-                        Icons.label_important,
-                        color: Colors.black,
-                        size: 20,
+              Expanded(
+                flex: 1,
+                child: ListView.builder(
+                  itemCount: P2pType.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      // margin: EdgeInsets.fromLTRB(0, 8, 0, 8.0),
+                      height: 40,
+                      child: CheckboxListTile(
+                        value: selecteP2PType.contains(P2pType[index].typeId),
+                        onChanged: (bool selected) {
+                          _onCategorySelected(
+                              selected, P2pType[index].typeId, "P2pType");
+                        },
+                        title: Text(P2pType[index].typeName,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w400)),
+                        secondary: const Icon(
+                          Icons.label_important,
+                          color: Colors.black,
+                          size: 20,
+                        ),
+                        activeColor: Colors.green,
+                        checkColor: Colors.white,
                       ),
-                      activeColor: Colors.green,
-                      checkColor: Colors.white,
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-            Container(
-              height: 16,
-              margin: EdgeInsets.only(top: 8.0),
-              padding: EdgeInsets.all(0.0),
-              child: Text(
-                "Business Unit",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500),
+              Container(
+                height: 16,
+                margin: EdgeInsets.only(top: 8.0),
+                padding: EdgeInsets.all(0.0),
+                child: Text(
+                  "Business Unit",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: ListView.builder(
-                itemCount: _buCategories.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    height: 40,
-                    child: CheckboxListTile(
-                      value: selecteCategorys
-                          .contains(_buCategories[index].businessUnitId),
-                      onChanged: (bool selected) {
-                        _onCategorySelected(
-                            selected,
-                            _buCategories[index].businessUnitId,
-                            "_buCategories");
-                      },
-                      title: Text(_buCategories[index].businessUnitName,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w400)),
-                      secondary: const Icon(
-                        Icons.lens,
-                        color: Colors.black,
-                        size: 16,
+              Expanded(
+                flex: 3,
+                child: ListView.builder(
+                  itemCount: _buCategories.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 40,
+                      child: CheckboxListTile(
+                        value: selecteCategorys
+                            .contains(_buCategories[index].businessUnitId),
+                        onChanged: (bool selected) {
+                          _onCategorySelected(
+                              selected,
+                              _buCategories[index].businessUnitId,
+                              "_buCategories");
+                        },
+                        title: Text(_buCategories[index].businessUnitName,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.w400)),
+                        secondary: const Icon(
+                          Icons.lens,
+                          color: Colors.black,
+                          size: 16,
+                        ),
+                        activeColor: Colors.green,
+                        checkColor: Colors.white,
                       ),
-                      activeColor: Colors.green,
-                      checkColor: Colors.white,
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+              ElevatedButton(
+                onPressed: () => {getDate()},
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.orange)),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(10, 10.0, 10, 10),
+                  child: const Text('Get Data', style: TextStyle(fontSize: 16)),
+                ),
+              ),
+              SizedBox(height: 10),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Center(child: CircularProgressIndicator());
+    }
   }
 }

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -31,6 +33,18 @@ class _BodyState extends State<Body> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // SharedPreferences sharedPreferences;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String token = '';
+  @override
+  void initState() {
+    isLoading = false;
+    generateTocken();
+    super.initState();
+  }
+
+  void generateTocken() async {
+    await Firebase.initializeApp();
+    token = await FirebaseMessaging.instance.getToken();
+  }
 
   Future<void> _handleSubmitted() async {
     if (_formKey.currentState.validate()) {
@@ -55,7 +69,7 @@ class _BodyState extends State<Body> {
             "PassKey": "a486f489-76c0-4c49-8ff0-d0fdec0a162b",
             "UserName": usernameController.text.trim(),
             "UserPassword": passwordController.text.trim(),
-            "TokenDevice": "test string"
+            "TokenDevice": token.toString()
           };
           print("BODY: $body");
 
@@ -79,7 +93,14 @@ class _BodyState extends State<Body> {
                 await globalMyLocalPrefes.setString(
                     AppConstant.ACCESS_TOKEN, login.tokenKey);
                 await globalMyLocalPrefes.setString(
-                    AppConstant.USERNAME, login.firstName);
+                    AppConstant.FIRST_NAME, login.firstName);
+
+                await globalMyLocalPrefes.setString(
+                    AppConstant.LAST_NAME, login.lastName);
+                await globalMyLocalPrefes.setString(
+                    AppConstant.BUSNAME, login.businessUnitName);
+                await globalMyLocalPrefes.setString(
+                    AppConstant.DEPTNAME, login.departmentName);
                 await globalMyLocalPrefes.setString(AppConstant.IMAGE,
                     login.photoPath == null ? "null" : login.photoPath);
                 await globalMyLocalPrefes.setString(AppConstant.PHONENO,
@@ -102,6 +123,7 @@ class _BodyState extends State<Body> {
                 setState(() {
                   isLoading = false;
                 });
+
                 _scaffoldKey.currentState.showSnackBar(UIhelper.showSnackbars(
                     "Something wnet wrong.. Please try again later."));
               }
@@ -110,14 +132,31 @@ class _BodyState extends State<Body> {
               setState(() {
                 isLoading = false;
               });
-              _scaffoldKey.currentState.showSnackBar(UIhelper.showSnackbars(
+              ScaffoldMessenger.of(context).showSnackBar(UIhelper.showSnackbars(
                   "Something wnet wrong.. Please try again later."));
             }
+          }, onError: (error) {
+            setState(() {
+              isLoading = false;
+            });
+            print("Error == $error");
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: new Text('Something went wrong..'),
+              duration: new Duration(seconds: 2),
+            ));
           });
         } catch (e) {
           setState(() {
             isLoading = false;
           });
+          Fluttertoast.showToast(
+              msg: "Please try again later.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
           print("Error: $e");
           return (e);
         }
@@ -133,12 +172,6 @@ class _BodyState extends State<Body> {
             fontSize: 16.0);
       }
     });
-  }
-
-  @override
-  void initState() {
-    isLoading = false;
-    super.initState();
   }
 
   @override

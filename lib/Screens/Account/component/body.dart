@@ -3,6 +3,7 @@ import 'package:p2p/Screens/Account/EditProfile/editProfile.dart';
 import 'package:p2p/components/LogoutOverlay.dart';
 // import 'package:p2p/components/langDiaBox.dart';
 import 'package:p2p/constants.dart';
+import 'package:p2p/constants/AppConstant.dart';
 import 'package:p2p/localization/localization_constants.dart';
 import 'package:p2p/main.dart';
 import './background.dart';
@@ -29,6 +30,10 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    String fname = globalMyLocalPrefes.getString(AppConstant.FIRST_NAME);
+    String lname = globalMyLocalPrefes.getString(AppConstant.LAST_NAME);
+    String depname = globalMyLocalPrefes.getString(AppConstant.DEPTNAME);
+
     return Background(
       child: Container(
         constraints: BoxConstraints.expand(
@@ -59,12 +64,11 @@ class _BodyState extends State<Body> {
                                     fit: BoxFit.contain,
                                     image: AssetImage(
                                         "assets/images/Profile-512.png")))),
-                        title: Text('Poonam Yadav'),
-                        subtitle: Text('Software Dev'),
+                        title: Text('$fname $lname'),
+                        subtitle: Text('$depname'),
                       ),
                     ),
                     SizedBox(height: size.height * 0.03),
-
                     Card(
                       child: ListTile(
                         leading: Icon(
@@ -82,73 +86,6 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                     SizedBox(height: size.height * 0.02),
-                    // Card(
-                    //   child: ListTile(
-                    //     leading: Icon(
-                    //       Icons.language,
-                    //       color: kPrimaryColor,
-                    //     ),
-                    //     trailing: Container(
-                    //       width: size.width * 0.63,
-                    //       child: DropdownButton<Language>(
-                    //         iconSize: 0,
-                    //         underline: SizedBox(),
-                    //         hint: Text(
-                    //           getTranslated(context, "Language"),
-                    //           style: TextStyle(
-                    //             fontSize: 16,
-                    //             color: Colors.black,
-                    //           ),
-                    //         ),
-                    //         onChanged: (Language language) {
-                    //           _changeLanguage(language);
-                    //         },
-                    //         items: Language.languageList()
-                    //             .map<DropdownMenuItem<Language>>(
-                    //               (e) => DropdownMenuItem<Language>(
-                    //                 value: e,
-                    //                 child: Row(
-                    //                   mainAxisAlignment:
-                    //                       MainAxisAlignment.spaceBetween,
-                    //                   children: <Widget>[
-                    //                     Image.asset(
-                    //                       e.flag,
-                    //                       height: 35,
-                    //                     ),
-                    //                     Container(
-                    //                         margin: EdgeInsets.only(left: 0),
-                    //                         child: Text(e.name)),
-                    //                     Container(
-                    //                       color: Colors.pink,
-                    //                       child: Icon(
-                    //                         Icons.check,
-                    //                         color: kPrimaryColor,
-                    //                       ),
-                    //                     ),
-                    //                   ],
-                    //                 ),
-                    //               ),
-                    //             )
-                    //             .toList(),
-                    //       ),
-                    //     ),
-                    //   ),
-                    //   //  ListTile(
-                    //   //   leading: Icon(
-                    //   //     Icons.language,
-                    //   //     color: kPrimaryColor,
-                    //   //   ),
-                    //   //   title: Text('Language'),
-                    //   //   trailing: Icon(Icons.keyboard_arrow_right),
-                    //   //   onTap: () {
-                    //   //     // showDialog(
-                    //   //     //     context: context,
-                    //   //     //     builder: (context) {
-                    //   //     //       return LangDiaBox();
-                    //   //     //     });
-                    //   //   },
-                    //   // ),
-                    // ),
                     Card(
                       child: ListTile(
                         leading: Icon(

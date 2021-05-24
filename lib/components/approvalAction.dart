@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:p2p/Screens/Approval/approval.dart';
 import 'package:p2p/Screens/HomePage/homePage.dart';
-import 'package:p2p/constants.dart';
 import 'package:p2p/constants/Services.dart';
 import 'package:p2p/localization/localization_constants.dart';
 // import 'package:toast/toast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:p2p/routes/route_names.dart';
 
 class ApprovalAction extends StatefulWidget {
   final String actionText;
@@ -67,25 +67,20 @@ class _ApprovalActionState extends State<ApprovalAction>
         setState(() {
           isLoading = false;
         });
-
+        Fluttertoast.showToast(
+            msg: "Status successfully updated to ${widget.actionText} !",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
         print("j&&& $jsonResponse");
-        Approval();
+        Navigator.pushNamed(context, homeRoute);
       } else {
         print("ModelError: ${jsonResponse["ModelErrors"]}");
         if (jsonResponse["ModelErrors"] == 'Unauthorized') {
-          GetToken().getToken().then((value) {
-            Fluttertoast.showToast(
-                msg: "Please try again!!",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0);
-
-            // Toast.show("Please try again!!", context,
-            //     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-          });
+          GetToken().getToken().then((value) {});
         } else {
           Fluttertoast.showToast(
               msg: "Please check internet connection!!",
@@ -95,10 +90,6 @@ class _ApprovalActionState extends State<ApprovalAction>
               backgroundColor: Colors.red,
               textColor: Colors.white,
               fontSize: 16.0);
-          // Toast.show("Please check internet connection", context,
-          //     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-          // .showSnackBar(
-          //     currentState   UIhelper.showSnackbars(jsonResponse["ModelErrors"]));
         }
       }
     });
@@ -152,39 +143,43 @@ class _ApprovalActionState extends State<ApprovalAction>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ButtonTheme(
+                          padding: const EdgeInsets.all(10.0),
+                          child: ButtonTheme(
                             height: 35.0,
                             minWidth: 110.0,
-                            child: RaisedButton(
-                              color: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              splashColor: kPrimaryColor.withAlpha(70),
-                              child: Text(
-                                getTranslated(context, 'No'),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.0),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            )),
-                      ),
+                            child: ElevatedButton(
+                                onPressed: () => {Navigator.pop(context)},
+                                style: ButtonStyle(
+                                    splashFactory: NoSplash.splashFactory,
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.red)),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Text(
+                                    getTranslated(context, 'No'),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0),
+                                  ),
+                                )),
+                          )),
                       Padding(
                           padding: const EdgeInsets.only(
                               left: 20.0, right: 10.0, top: 10.0, bottom: 10.0),
                           child: ButtonTheme(
                               height: 35.0,
                               minWidth: 110.0,
-                              child: RaisedButton(
-                                color: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                splashColor: Colors.white.withAlpha(40),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    splashFactory: NoSplash.splashFactory,
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.green)),
                                 child: Text(
                                   getTranslated(context, 'Yes'),
                                   textAlign: TextAlign.center,

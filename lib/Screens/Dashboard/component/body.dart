@@ -306,14 +306,8 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // return WillPopScope(
-    //   onWillPop: () async {
-    //     return false;
-    //   },
-    //   child:
     return Background(
       child: Container(
-        // color: Color(0xffE5E5E5),
         child: StaggeredGridView.count(
           crossAxisCount: 4,
           padding: const EdgeInsets.all(10.0),

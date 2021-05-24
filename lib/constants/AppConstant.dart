@@ -4,6 +4,8 @@ class AppConstant {
   static final String USER_ID = "userId";
   static final String DEPARTMENT = "deptId";
   static final String BUSINESSID = "businessId";
+  static final String DEPTNAME = "deptNAme";
+  static final String BUSNAME = "busiName";
   static final String EMP_ID = "0";
 
   static final String LoginGmailID = "loginGmailId";
