@@ -15,39 +15,8 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   BackButtonInterceptor.add(myInterceptor);
-  // }
-
-  // @override
-  // void dispose() {
-  //   print("BACK BUTTON45678!");
-  //   BackButtonInterceptor.remove(myInterceptor);
-  //   super.dispose();
-  // }
-
-  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-  //   // _onBackPressed(); // It worked for me instead of above line
-  //   print("BACK BUTTON!"); // Do some stuff.
-  //   return true;
-  // }
-
   var data = [0.0, 1.0, 1.5, 2.0, 0.0, 0.0, -0.5, -1.0, -0.5, 0.0, 0.0];
   var data1 = [0.0, -2.0, 3.5, -2.0, 0.5, 0.7, 0.8, 1.0, 2.0, 3.0, 3.2];
-
-  // List<CircularStackEntry> circularData = <CircularStackEntry>[
-  //   new CircularStackEntry(
-  //     <CircularSegmentEntry>[
-  //       new CircularSegmentEntry(700.0, Color(0xff4285F4), rankKey: 'Q1'),
-  //       new CircularSegmentEntry(100.0, Color(0xfff3af00), rankKey: 'Q2'),
-  //       new CircularSegmentEntry(1800.0, Color(0xffec3337), rankKey: 'Q3'),
-  //       new CircularSegmentEntry(1000.0, Color(0xff40b24b), rankKey: 'Q4'),
-  //     ],
-  //     rankKey: 'Quarterly Profits',
-  //   ),
-  // ];
 
   Material myTextItems(String title, String usaPrice, String thaiPrice) {
     Size size = MediaQuery.of(context).size;
@@ -57,9 +26,9 @@ class _BodyState extends State<Body> {
       borderRadius: BorderRadius.circular(10.0),
 
       shadowColor: Color(0x802196F3),
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -70,7 +39,8 @@ class _BodyState extends State<Body> {
                 children: <Widget>[
                   Center(
                       child: Padding(
-                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          padding: EdgeInsets.only(
+                              top: 2, bottom: 4, left: 20, right: 20),
                           child: Text(
                             title,
                             style: TextStyle(
@@ -78,46 +48,52 @@ class _BodyState extends State<Body> {
                                 color: kPrimaryColor,
                                 fontWeight: FontWeight.bold),
                           ))),
-                  Row(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    // // verticalDirection: VerticalDirection.up,
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      // // verticalDirection: VerticalDirection.up,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                            margin: const EdgeInsets.only(left: 0.0),
+                            child: Image.asset(
+                              "assets/images/usa2.png",
+                              width: size.width * 0.06,
+                            )),
+                        Container(
+                            padding: EdgeInsets.only(left: 20),
+                            child: Text(
+                              usaPrice,
+                              style: TextStyle(
+                                  color: kOrangeColor, fontSize: 20.0),
+                            )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      // verticalDirection: VerticalDirection.up,
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
                           margin: const EdgeInsets.only(left: 0.0),
                           child: Image.asset(
-                            "assets/images/usa2.png",
+                            "assets/images/thai2.png",
                             width: size.width * 0.06,
-                          )),
-                      Container(
-                          padding: EdgeInsets.only(left: 20),
-                          child: Text(
-                            usaPrice,
-                            style:
-                                TextStyle(color: kOrangeColor, fontSize: 20.0),
-                          )),
-                    ],
-                  ),
-                  Row(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    // verticalDirection: VerticalDirection.up,
-                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(left: 0.0),
-                        child: Image.asset(
-                          "assets/images/thai2.png",
-                          width: size.width * 0.06,
+                          ),
                         ),
-                      ),
-                      Container(
-                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                          child: Text(
-                            thaiPrice,
-                            style:
-                                TextStyle(color: kPrimaryColor, fontSize: 20.0),
-                          )),
-                    ],
+                        Container(
+                            padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            child: Text(
+                              thaiPrice,
+                              style: TextStyle(
+                                  color: kPrimaryColor, fontSize: 20.0),
+                            )),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -308,14 +284,11 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
     return Background(
       child: Container(
-        child: StaggeredGridView.count(
-          crossAxisCount: 4,
-          padding: const EdgeInsets.all(10.0),
-          crossAxisSpacing: 12.0,
-          mainAxisSpacing: 12.0,
-          children: <Widget>[
+        margin: EdgeInsets.only(top: size.height * 0.05),
+        child: Column(
+          children: [
             Container(
-              margin: EdgeInsets.only(top: 25),
+              // margin: EdgeInsets.only(top: size.height * 0.05),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -375,62 +348,62 @@ class _BodyState extends State<Body> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: myTextItems(
-                  getTranslated(context, "BuyingRate"), "9,090.00", "315.96"),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: myTextItems(
-                  getTranslated(context, "SellingRate"), "9,110.00", "318.34"),
+            Container(
+              margin: EdgeInsets.only(top: 40),
+              // margin: EdgeInsets.only(top: size.height * 0.1),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: myTextItems(getTranslated(context, "BuyingRate"),
+                        "9,090.00", "315.96"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: myTextItems(getTranslated(context, "SellingRate"),
+                        "9,110.00", "318.34"),
+                  ),
+                ],
+              ),
             ),
             Container(
+              margin: EdgeInsets.only(top: 30, left: 20, right: 20),
+              // margin: EdgeInsets.only(top: size.height * 0.2),
               child: Column(
                 children: <Widget>[
-                  Flexible(
-                    child: Row(
-                      children: <Widget>[
-                        _buildStatCard(
-                            'PO Transactions',
-                            getTranslated(context, 'TotalBudget'),
-                            '1.81 M',
-                            Colors.orange),
-                        _buildStatCard(
-                            'PO Transactions',
-                            getTranslated(context, 'Outstanding'),
-                            '1.81 M',
-                            Colors.deepPurple),
-                      ],
-                    ),
+                  Row(
+                    children: <Widget>[
+                      _buildStatCard(
+                          'PO Transactions',
+                          getTranslated(context, 'TotalBudget'),
+                          '1.81 M',
+                          Colors.orange),
+                      _buildStatCard(
+                          'PO Transactions',
+                          getTranslated(context, 'Outstanding'),
+                          '1.81 M',
+                          Colors.deepPurple),
+                    ],
                   ),
-                  Flexible(
-                    child: Row(
-                      children: <Widget>[
-                        _buildStatCard(
-                            'Non-PO Transactions',
-                            getTranslated(context, 'TotalBudget'),
-                            '1.81 M',
-                            Colors.green),
-                        _buildStatCard(
-                            'Non-PO Transactions',
-                            getTranslated(context, 'Expenses'),
-                            '1.81 M',
-                            Colors.blue),
-                      ],
-                    ),
+                  Row(
+                    children: <Widget>[
+                      _buildStatCard(
+                          'Non-PO Transactions',
+                          getTranslated(context, 'TotalBudget'),
+                          '1.81 M',
+                          Colors.green),
+                      _buildStatCard(
+                          'Non-PO Transactions',
+                          getTranslated(context, 'Expenses'),
+                          '1.81 M',
+                          Colors.blue),
+                    ],
                   )
                 ],
               ),
             ),
-          ],
-          staggeredTiles: [
-            StaggeredTile.extent(4, 100.0),
-            StaggeredTile.extent(2, 150.0),
-            StaggeredTile.extent(2, 150.0),
-            StaggeredTile.extent(4, 220.0),
-            StaggeredTile.extent(2, 120.0),
-            StaggeredTile.extent(4, 250.0),
           ],
         ),
       ),

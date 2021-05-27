@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:p2p/Screens/Approval/ApprovalDetails/component/approveDetailsPODO.dart';
 import 'package:p2p/Screens/Approval/ApprovalDetails/component/aprovHistoryPODO.dart';
-import 'package:p2p/Screens/Approval/approval.dart';
 import 'package:p2p/Screens/Approval/component/approvalPODO.dart';
 import 'package:p2p/Screens/HomePage/homePage.dart';
 import 'package:p2p/constants/AppConstant.dart';
@@ -13,12 +12,12 @@ import 'package:p2p/localization/localization_constants.dart';
 import 'package:p2p/main.dart';
 import 'package:p2p/utils/UIhelper.dart';
 import 'package:p2p/utils/customeAlertBox.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:p2p/components/approvalAction.dart';
 import 'package:p2p/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 import './background.dart';
 import 'package:p2p/Screens/Approval/HistoryPopup/history-popup.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 
 class Body extends StatefulWidget {
   String jsonUser;
@@ -34,7 +33,7 @@ class _BodyState extends State<Body> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<HistResultObject> approvalHistList = new List();
   List<ResultObjectAprvDetls> approvalDetailsRst = new List();
-
+  String path;
   // int userID;
 
   @override
@@ -75,7 +74,7 @@ class _BodyState extends State<Body> {
         print("j&&& $jsonResponse");
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage(currentIndex: 1)),
           (Route<dynamic> route) => false,
         );
         // Navigator.pushReplacement(
@@ -117,12 +116,6 @@ class _BodyState extends State<Body> {
         positiveBtnText: getTranslated(context, 'Yes'),
         negativeBtnText: getTranslated(context, 'No'));
     showDialog(context: context, builder: (BuildContext context) => dialog);
-
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => ApprovalAction(
-    //             actionData: actionData, actionText: actionText)));
   }
 
   Widget _launchStatus(BuildContext context, AsyncSnapshot<void> snapshot) {
@@ -134,13 +127,14 @@ class _BodyState extends State<Body> {
   }
 
   Future<void> _launchInBrowser(String url) async {
+    print(url);
+    // await canLaunch(pdfFile)
+    //     ? await launch(pdfFile)
+    //     : throw 'Could not launch $pdfFile';
+
+    if (!url.contains('http')) url = 'http://$url';
     if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: false,
-        forceWebView: false,
-        headers: <String, String>{'my_header_key': 'my_header_value'},
-      );
+      await launch(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -157,7 +151,6 @@ class _BodyState extends State<Body> {
 
     Size size = MediaQuery.of(context).size;
 
-    const String toLaunch = 'http://www.africau.edu/images/default/sample.pdf';
     if ((!isLoading)) {
       return Background(
         child: (approvalDetailsRst != null && approvalDetailsRst.length > 0)
@@ -526,9 +519,12 @@ class _BodyState extends State<Body> {
                                                         child: InkWell(
                                                           onTap: () =>
                                                               setState(() {
-                                                            _launched =
-                                                                _launchInBrowser(
-                                                                    toLaunch);
+                                                            _launched = _launchInBrowser(
+                                                                approvalDetailsRst[
+                                                                        0]
+                                                                    .attacheFile[
+                                                                        position]
+                                                                    .fileName);
                                                           }),
                                                           child: Container(
                                                             padding:
@@ -543,7 +539,7 @@ class _BodyState extends State<Body> {
                                                                             .red[
                                                                         400]),
                                                                 Text(
-                                                                    'Supporting Document.PNG')
+                                                                    'Supporting Document ${approvalDetailsRst[0].attacheFile[position].fileType}')
                                                               ],
                                                             ),
                                                           ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:p2p/Screens/HomePage/homePage.dart';
+import 'package:p2p/Screens/Login/login-page.dart';
 import 'package:p2p/constants/AppConstant.dart';
 import 'package:p2p/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
 
@@ -11,28 +13,29 @@ class Landing extends StatefulWidget {
 }
 
 class _LandingState extends State<Landing> {
-  String _username = "";
-
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () {
-      _loadUserInfo();
-    });
+    if (mounted) {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      Timer(Duration(seconds: 5), () {
+        _loadUserInfo();
+      });
+    }
   }
 
   _loadUserInfo() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String token = prefs.getString(AppConstant.ACCESS_TOKEN);
     String token = globalMyLocalPrefes.getString(AppConstant.ACCESS_TOKEN);
 
     print("token 345 $token");
     if (token == null) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/login', ModalRoute.withName('/login'));
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+          builder: (BuildContext context) => LoginScreen()));
     } else if (token != null) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/home', ModalRoute.withName('/home'));
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+          builder: (BuildContext context) => HomePage(
+                currentIndex: 0,
+              )));
     }
   }
 

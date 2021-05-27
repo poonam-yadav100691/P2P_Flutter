@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -18,40 +19,53 @@ import 'package:p2p/main.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
+  final int currentIndex;
+  HomePage({Key key, @required this.currentIndex}) : super(key: key);
+
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState(currentIndex);
 }
 
 class _HomePageState extends State<HomePage> {
-  Map _source = {ConnectivityResult.none: false};
-  MyConnectivity _connectivity = MyConnectivity.instance;
-  int _currentIndex = 0;
+  int currentIndex = 0;
   final List<Widget> _children = [
     Dashboard(),
     Approval(),
     CashFlow(),
     Account()
   ];
+  _HomePageState(this.currentIndex);
+  Map _source = {ConnectivityResult.none: false};
+  MyConnectivity _connectivity = MyConnectivity.instance;
+
   @override
   void initState() {
-    super.initState();
+    print("Home1");
 
+    super.initState();
     _connectivity.initialise();
     _connectivity.myStream.listen((source) {
       setState(() => _source = source);
     });
   }
 
+  @override
+  void dispose() {
+    print("Home3");
+
+    _connectivity.disposeStream();
+    super.dispose();
+  }
+
   void onTabTapped(int index) {
     setState(() {
-      _currentIndex = index;
+      currentIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var route = ModalRoute.of(context).settings.arguments;
-    print(route);
+    print("Home");
 
     return Align(
         alignment: Alignment.bottomLeft, // and bottomLeft
@@ -61,7 +75,7 @@ class _HomePageState extends State<HomePage> {
             child: DefaultTabController(
               length: 4,
               child: Scaffold(
-                  body: _children[_currentIndex], // new
+                  body: _children[currentIndex], // new
                   bottomNavigationBar: new Theme(
                     data: Theme.of(context).copyWith(
                         // sets the background color of the `BottomNavigationBar`
@@ -77,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                       selectedItemColor: kPrimaryColor,
                       unselectedItemColor: kGreyLightColor,
                       onTap: onTabTapped, // new
-                      currentIndex: _currentIndex, // new
+                      currentIndex: currentIndex, // new
                       items: [
                         new BottomNavigationBarItem(
                           icon: Icon(Icons.home),
@@ -99,12 +113,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )),
             )));
-  }
-
-  @override
-  void dispose() {
-    _connectivity.disposeStream();
-    super.dispose();
   }
 }
 

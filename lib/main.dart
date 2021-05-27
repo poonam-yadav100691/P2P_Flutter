@@ -18,7 +18,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future onSelectNotification(String payload) async {
-  print('######${payload}');
+  print('######$payload');
   print('on note selected');
   // navigatorKey.currentState.pushNamed('/history');
 }

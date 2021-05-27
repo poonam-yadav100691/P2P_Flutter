@@ -80,7 +80,7 @@ class ResultObjectAprvDetls {
     description = json['Description'];
     payTo = json['PayTo'];
     if (json['OrderItems'] != null) {
-      orderItems = new List<OrderItems>();
+      orderItems = <OrderItems>[];
       json['OrderItems'].forEach((v) {
         orderItems.add(new OrderItems.fromJson(v));
       });

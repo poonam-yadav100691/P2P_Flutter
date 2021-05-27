@@ -37,6 +37,7 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     isLoading = false;
+    print("LOGINHHHHHH");
     generateTocken();
     super.initState();
   }

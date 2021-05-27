@@ -21,7 +21,6 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool isLoading;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<ResultObject> approvalList = [];
   List p2PTypeId = [];
   List businessUnitIds = [];
@@ -42,7 +41,7 @@ class _BodyState extends State<Body> {
   void initState() {
     isLoading = true;
     _getApproveList();
-    _getFilterList();
+
     super.initState();
   }
 
@@ -125,8 +124,6 @@ class _BodyState extends State<Body> {
           selecteCategorys.add(categoryId);
         });
       }
-      print("selecteCategorys: $selecteCategorys");
-      print("selecteP2PType: $selecteP2PType");
     } else {
       if (type == 'P2pType') {
         setState(() {
@@ -137,8 +134,6 @@ class _BodyState extends State<Body> {
           selecteCategorys.remove(categoryId);
         });
       }
-      print("selecteCategorys: $selecteCategorys");
-      print("selecteP2PType: $selecteP2PType");
     }
   }
 
@@ -196,8 +191,8 @@ class _BodyState extends State<Body> {
                   new ApprovalList.fromJson(jsonResponse);
               setState(() {
                 approvalList = approveList.resultObject;
-                isLoading = false;
               });
+              _getFilterList();
             } else {
               if (jsonResponse["ModelErrors"] == 'Unauthorized') {
                 GetToken().getToken().then((value) {
@@ -258,8 +253,22 @@ class _BodyState extends State<Body> {
 
   Widget notiDetailCard(approvalList) {
     return Container(
+      decoration: new BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(.1),
+            blurRadius: 20.0, // soften the shadow
+            spreadRadius: 0.0, //extend the shadow
+            offset: Offset(
+              5.0, // Move to right 10  horizontally
+              5.0, // Move to bottom 10 Vertically
+            ),
+          )
+        ],
+      ),
       padding: new EdgeInsets.only(left: 10.0, right: 10.0, top: 10),
       child: new Card(
+        elevation: 0,
         child: new InkWell(
           onTap: () {
             _goToDetails(context, approvalList);
@@ -345,16 +354,17 @@ class _BodyState extends State<Body> {
                         child: SizedBox(
                           width: 90,
                           height: 30.0,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                                side: BorderSide(color: Colors.green)),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.green),
+                                shadowColor: MaterialStateProperty.all<Color>(
+                                    Colors.green)),
                             onPressed: () {
                               _goToDetails(context, approvalList);
                             },
-                            padding: const EdgeInsets.all(0),
-                            color: Colors.green,
-                            textColor: Colors.white,
                             child: Text("Action".toUpperCase(),
                                 style: TextStyle(fontSize: 14)),
                           ),
@@ -396,7 +406,6 @@ class _BodyState extends State<Body> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          // onPressed: onPressed,
           child: Icon(Icons.filter_list_outlined),
           onPressed: () {
             showModalBottomSheet<void>(

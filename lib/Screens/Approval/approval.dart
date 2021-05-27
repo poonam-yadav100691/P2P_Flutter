@@ -1,4 +1,3 @@
-import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:p2p/Screens/Approval/component/body.dart';
@@ -19,30 +18,24 @@ class _ApprovalState extends State<Approval> {
   @override
   void initState() {
     super.initState();
-    BackButtonInterceptor.add(myInterceptor);
   }
 
   @override
   void dispose() {
-    BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
-  }
-
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    // Navigator.pop(context);
-    print("BACK BUTTON!"); // Do some stuff.
-    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WillPopScope(
+      onWillPop: () async => false,
       child: Scaffold(
         // drawer: NavDrawer(),
         appBar: AppBar(
           title: Text(getTranslated(context, 'Approval')),
           backgroundColor: kPrimaryColor,
           shadowColor: Colors.transparent,
+          automaticallyImplyLeading: false,
           centerTitle: true,
           actions: <Widget>[
             IconButton(
@@ -54,15 +47,6 @@ class _ApprovalState extends State<Approval> {
                     MaterialPageRoute(builder: (context) => NotificationPage()),
                   );
                 }),
-            // IconButton(
-            //     icon: Icon(FontAwesomeIcons.filter),
-            //     color: kWhiteColor,
-            //     onPressed: () {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) => FilterPopup()),
-            //       );
-            //     }),
           ],
         ),
         body: Body(),

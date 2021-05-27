@@ -18,7 +18,7 @@ class CustomRouter {
   static Route<dynamic> generatedRoute(RouteSettings settings) {
     switch (settings.name) {
       case homeRoute:
-        return MaterialPageRoute(builder: (_) => HomePage());
+        return MaterialPageRoute(builder: (_) => HomePage(currentIndex: 0));
       case landingRoute:
         return MaterialPageRoute(builder: (_) => Landing());
       case accountRoute:
@@ -42,6 +42,6 @@ class CustomRouter {
       case approvalDetailsRoute:
         return MaterialPageRoute(builder: (_) => ApprovalDetails());
     }
-    return MaterialPageRoute(builder: (_) => LoginScreen());
+    return MaterialPageRoute(builder: (_) => Landing());
   }
 }
