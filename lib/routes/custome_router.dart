@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:p2p/Screens/Account/account.dart';
 import 'package:p2p/Screens/Approval/ApprovalDetails/approval-details.dart';
 import 'package:p2p/Screens/Approval/approval.dart';
-import 'package:p2p/Screens/Approval/filterPopup.dart';
 import 'package:p2p/Screens/CashFlow/BalSummary/bal-summary.dart';
 import 'package:p2p/Screens/CashFlow/CFCompare/cf-compare.dart';
 import 'package:p2p/Screens/CashFlow/CFTrend/cf-trend.dart';
 import 'package:p2p/Screens/CashFlow/cashFlow.dart';
+import 'package:p2p/Screens/ChangePAssword/changePassword.dart';
 import 'package:p2p/Screens/Dashboard/dashboard-page.dart';
 import 'package:p2p/Screens/HomePage/homePage.dart';
 import 'package:p2p/Screens/Login/login-page.dart';
@@ -41,6 +41,8 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => NotificationPage());
       case approvalDetailsRoute:
         return MaterialPageRoute(builder: (_) => ApprovalDetails());
+      case changePasswordRoute:
+        return MaterialPageRoute(builder: (_) => ChangePassword());
     }
     return MaterialPageRoute(builder: (_) => Landing());
   }

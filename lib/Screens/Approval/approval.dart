@@ -27,8 +27,7 @@ class _ApprovalState extends State<Approval> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return Container(
       child: Scaffold(
         // drawer: NavDrawer(),
         appBar: AppBar(

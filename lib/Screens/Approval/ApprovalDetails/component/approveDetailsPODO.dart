@@ -48,7 +48,7 @@ class ResultObjectAprvDetls {
   String description;
   String payTo;
   List<OrderItems> orderItems;
-  double netTotal;
+  String netTotal;
   String appStatus;
   String appType;
   List<AttacheFile> attacheFile;
@@ -123,13 +123,13 @@ class ResultObjectAprvDetls {
 
 class OrderItems {
   String title;
-  double price;
+  String price;
   double qty;
-  double total;
+  String total;
   double discount;
   double tax;
-  double freight;
-  double subTotal;
+  String freight;
+  String subTotal;
 
   OrderItems(
       {this.title,

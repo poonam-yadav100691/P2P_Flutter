@@ -614,104 +614,117 @@ class _BodyState extends State<Body> {
                       )),
                     )),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.only(top: 15.0, bottom: 10),
-                      child: SafeArea(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                            Container(
-                              width: size.width * 0.8,
-                              child: new Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  new ElevatedButton(
-                                    style: ButtonStyle(
-                                        splashFactory: NoSplash.splashFactory,
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                          Colors.green,
-                                        )),
-                                    onPressed: () {
-                                      if (resoneController.text != "") {
-                                        takeAction("Approve", appData);
-                                      } else {
-                                        Fluttertoast.showToast(
-                                            msg: "Please enter remark..!!",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                      }
-                                    },
-                                    child: Text(
-                                        getTranslated(context, 'Approve'),
-                                        style: TextStyle(fontSize: 18)),
+                  approvalDetailsRst[0].appStatus != "Approved"
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 15.0, bottom: 10),
+                          child: SafeArea(
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                Container(
+                                  width: size.width * 0.8,
+                                  child: new Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      new ElevatedButton(
+                                        style: ButtonStyle(
+                                            splashFactory:
+                                                NoSplash.splashFactory,
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(
+                                              Colors.green,
+                                            )),
+                                        onPressed: () {
+                                          if (resoneController.text != "") {
+                                            takeAction("Approve", appData);
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg: "Please enter remark..!!",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                          }
+                                        },
+                                        child: Text(
+                                            getTranslated(context, 'Approve'),
+                                            style: TextStyle(fontSize: 18)),
+                                      ),
+                                      new ElevatedButton(
+                                        style: ButtonStyle(
+                                            splashFactory:
+                                                NoSplash.splashFactory,
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.red)),
+                                        child: new Text(
+                                            getTranslated(context, 'Reject'),
+                                            style: TextStyle(fontSize: 18)),
+                                        onPressed: () {
+                                          if (resoneController.text != "") {
+                                            takeAction("Reject", appData);
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg: "Please enter remark..!!",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                          }
+                                        },
+                                      ),
+                                      approvalDetailsRst[0].appStatus != "Hold"
+                                          ? new ElevatedButton(
+                                              style: ButtonStyle(
+                                                  splashFactory:
+                                                      NoSplash.splashFactory,
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(
+                                                    Colors.orange,
+                                                  )),
+                                              child: new Text(
+                                                  getTranslated(
+                                                      context, 'Hold'),
+                                                  style:
+                                                      TextStyle(fontSize: 18)),
+                                              onPressed: () {
+                                                if (resoneController.text !=
+                                                    "") {
+                                                  takeAction("Hold", appData);
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg:
+                                                          "Please enter remark..!!",
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
+                                                }
+                                              },
+                                            )
+                                          : Container(),
+                                    ],
                                   ),
-                                  new ElevatedButton(
-                                    style: ButtonStyle(
-                                        splashFactory: NoSplash.splashFactory,
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.red)),
-                                    child: new Text(
-                                        getTranslated(context, 'Reject'),
-                                        style: TextStyle(fontSize: 18)),
-                                    onPressed: () {
-                                      if (resoneController.text != "") {
-                                        takeAction("Reject", appData);
-                                      } else {
-                                        Fluttertoast.showToast(
-                                            msg: "Please enter remark..!!",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                      }
-                                    },
-                                  ),
-                                  approvalDetailsRst[0].appStatus != "Hold"
-                                      ? new ElevatedButton(
-                                          style: ButtonStyle(
-                                              splashFactory:
-                                                  NoSplash.splashFactory,
-                                              backgroundColor:
-                                                  MaterialStateProperty.all<
-                                                      Color>(
-                                                Colors.orange,
-                                              )),
-                                          child: new Text(
-                                              getTranslated(context, 'Hold'),
-                                              style: TextStyle(fontSize: 18)),
-                                          onPressed: () {
-                                            if (resoneController.text != "") {
-                                              takeAction("Hold", appData);
-                                            } else {
-                                              Fluttertoast.showToast(
-                                                  msg:
-                                                      "Please enter remark..!!",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.BOTTOM,
-                                                  timeInSecForIosWeb: 1,
-                                                  backgroundColor: Colors.red,
-                                                  textColor: Colors.white,
-                                                  fontSize: 16.0);
-                                            }
-                                          },
-                                        )
-                                      : Container(),
-                                ],
-                              ),
-                            )
-                          ]))),
+                                )
+                              ])),
+                        )
+                      : Container(),
                 ],
               )
             : Container(child: Text("No Data")),

@@ -35,25 +35,24 @@ class _HomePageState extends State<HomePage> {
     Account()
   ];
   _HomePageState(this.currentIndex);
-  Map _source = {ConnectivityResult.none: false};
-  MyConnectivity _connectivity = MyConnectivity.instance;
+  // Map _source = {ConnectivityResult.none: false};
+  // MyConnectivity _connectivity = MyConnectivity.instance;
 
   @override
   void initState() {
     print("Home1");
-
     super.initState();
-    _connectivity.initialise();
-    _connectivity.myStream.listen((source) {
-      setState(() => _source = source);
-    });
+    // _connectivity.initialise();
+    // _connectivity.myStream.listen((source) {
+    //   setState(() => _source = source);
+    // });
   }
 
   @override
   void dispose() {
     print("Home3");
 
-    _connectivity.disposeStream();
+    // _connectivity.disposeStream();
     super.dispose();
   }
 
@@ -67,52 +66,54 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     print("Home");
 
-    return Align(
-        alignment: Alignment.bottomLeft, // and bottomLeft
-        child: SafeArea(
-            bottom: true,
-            top: false,
-            child: DefaultTabController(
-              length: 4,
-              child: Scaffold(
-                  body: _children[currentIndex], // new
-                  bottomNavigationBar: new Theme(
-                    data: Theme.of(context).copyWith(
-                        // sets the background color of the `BottomNavigationBar`
-                        canvasColor: kWhiteColor,
-                        // sets the active color of the `BottomNavigationBar` if `Brightness` is light
-                        primaryColor: Colors.red,
-                        textTheme: Theme.of(context).textTheme.copyWith(
-                            caption: new TextStyle(
-                                color: Colors
-                                    .yellow))), // sets the inactive color of the `BottomNavigationBar`
-                    child: BottomNavigationBar(
-                      type: BottomNavigationBarType.fixed,
-                      selectedItemColor: kPrimaryColor,
-                      unselectedItemColor: kGreyLightColor,
-                      onTap: onTabTapped, // new
-                      currentIndex: currentIndex, // new
-                      items: [
-                        new BottomNavigationBarItem(
-                          icon: Icon(Icons.home),
-                          label: getTranslated(context, 'Home'),
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: Align(
+            alignment: Alignment.bottomLeft, // and bottomLeft
+            child: SafeArea(
+                bottom: true,
+                top: false,
+                child: DefaultTabController(
+                  length: 4,
+                  child: Scaffold(
+                      body: _children[currentIndex], // new
+                      bottomNavigationBar: new Theme(
+                        data: Theme.of(context).copyWith(
+                            // sets the background color of the `BottomNavigationBar`
+                            canvasColor: kWhiteColor,
+                            // sets the active color of the `BottomNavigationBar` if `Brightness` is light
+                            primaryColor: Colors.red,
+                            textTheme: Theme.of(context).textTheme.copyWith(
+                                caption: new TextStyle(
+                                    color: Colors
+                                        .yellow))), // sets the inactive color of the `BottomNavigationBar`
+                        child: BottomNavigationBar(
+                          type: BottomNavigationBarType.fixed,
+                          selectedItemColor: kPrimaryColor,
+                          unselectedItemColor: kGreyLightColor,
+                          onTap: onTabTapped, // new
+                          currentIndex: currentIndex, // new
+                          items: [
+                            new BottomNavigationBarItem(
+                              icon: Icon(Icons.home),
+                              label: getTranslated(context, 'Home'),
+                            ),
+                            new BottomNavigationBarItem(
+                              icon: Icon(Icons.check_circle),
+                              label: getTranslated(context, 'Approval'),
+                            ),
+                            new BottomNavigationBarItem(
+                              icon: Icon(FontAwesomeIcons.chartLine),
+                              label: getTranslated(context, 'CashFlow'),
+                            ),
+                            new BottomNavigationBarItem(
+                              icon: Icon(Icons.person),
+                              label: getTranslated(context, 'Account'),
+                            ),
+                          ],
                         ),
-                        new BottomNavigationBarItem(
-                          icon: Icon(Icons.check_circle),
-                          label: getTranslated(context, 'Approval'),
-                        ),
-                        new BottomNavigationBarItem(
-                          icon: Icon(FontAwesomeIcons.chartLine),
-                          label: getTranslated(context, 'CashFlow'),
-                        ),
-                        new BottomNavigationBarItem(
-                          icon: Icon(Icons.person),
-                          label: getTranslated(context, 'Account'),
-                        ),
-                      ],
-                    ),
-                  )),
-            )));
+                      )),
+                ))));
   }
 }
 
@@ -123,7 +124,7 @@ class GetToken {
         String username =
             globalMyLocalPrefes.getString(AppConstant.LoginGmailID);
         String password = globalMyLocalPrefes.getString(AppConstant.PASSWORD);
-
+        print("New token:");
         try {
           final uri = Services.LOGIN;
           Map body = {
@@ -131,7 +132,7 @@ class GetToken {
             "UserName": username,
             "UserPassword": password
           };
-
+          print("New token: $body");
           http.post(Uri.parse(uri), body: body).then((response) async {
             if (response.statusCode == 200) {
               var jsonResponse = jsonDecode(response.body);

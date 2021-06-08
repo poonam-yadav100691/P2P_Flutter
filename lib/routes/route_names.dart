@@ -11,3 +11,4 @@ const String dashboardRoute = '/dashboard';
 const String loginRoute = '/login';
 const String notificationRoute = '/notification';
 const String approvalDetailsRoute = '/approvalDetails';
+const String changePasswordRoute = '/changePassword';

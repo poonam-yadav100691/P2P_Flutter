@@ -46,7 +46,7 @@ class ResultObject {
   String title;
   int businessUnitId;
   String businessUnitName;
-  double totalAmount;
+  String totalAmount;
   String appStatus;
   String appType;
   String currencyName;

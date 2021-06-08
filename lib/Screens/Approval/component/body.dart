@@ -267,116 +267,149 @@ class _BodyState extends State<Body> {
         ],
       ),
       padding: new EdgeInsets.only(left: 10.0, right: 10.0, top: 10),
-      child: new Card(
-        elevation: 0,
-        child: new InkWell(
-          onTap: () {
-            _goToDetails(context, approvalList);
-          },
-          child: Row(
-            children: <Widget>[
-              Container(
-                height: 100,
-                width: 10,
-                decoration: new BoxDecoration(
-                  color: approvalList.appStatus != "Pending"
-                      ? Colors.grey
-                      : Colors.orange,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5.0),
-                      bottomLeft: Radius.circular(5.0)),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        approvalList.appNo,
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Flexible(
-                        child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          strutStyle: StrutStyle(fontSize: 12.0),
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              text: approvalList.title),
-                        ),
-                      ),
-                      Text(
-                        'BU: ${approvalList.businessUnitName}',
-                        style: new TextStyle(),
-                      ),
-                      Text(
-                        'Total: ${approvalList.totalAmount} ${approvalList.currencyName}',
-                        style: new TextStyle(),
-                      ),
-                    ],
-                  ),
-                  // color: Colors.amber,
-                  width: 100,
-                  height: 100,
-                ),
-              ),
-              Container(
-                height: 100,
-                // width: 100,
-                // color: Colors.blue,
-                child: Container(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0, right: 8),
-                        child: Text(
-                          approvalList.appDate,
-                          style: new TextStyle(),
-                        ),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(top: 8.0, right: 8),
-                          child: approvalList.title != null
-                              ? Text(
-                                  approvalList.appStatus,
-                                  style: new TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: kGreyLightColor),
-                                )
-                              : Container()),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: SizedBox(
-                          width: 90,
-                          height: 30.0,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                elevation: MaterialStateProperty.all(0),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.green),
-                                shadowColor: MaterialStateProperty.all<Color>(
-                                    Colors.green)),
-                            onPressed: () {
-                              _goToDetails(context, approvalList);
-                            },
-                            child: Text("Action".toUpperCase(),
-                                style: TextStyle(fontSize: 14)),
+      child: Column(
+        children: [
+          new Card(
+            elevation: 0,
+            child: new InkWell(
+              onTap: () {
+                _goToDetails(context, approvalList);
+              },
+              child: Row(
+                children: <Widget>[
+                  approvalList.appStatus == "Pending"
+                      ? Container(
+                          height: 100,
+                          width: 10,
+                          decoration: new BoxDecoration(
+                            color: Colors.orange,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5.0),
+                                bottomLeft: Radius.circular(5.0)),
                           ),
-                        ),
+                        )
+                      : Container(),
+                  approvalList.appStatus == "Approved"
+                      ? Container(
+                          height: 100,
+                          width: 10,
+                          decoration: new BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5.0),
+                                bottomLeft: Radius.circular(5.0)),
+                          ),
+                        )
+                      : Container(),
+                  approvalList.appStatus == "Hold"
+                      ? Container(
+                          height: 100,
+                          width: 10,
+                          decoration: new BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5.0),
+                                bottomLeft: Radius.circular(5.0)),
+                          ),
+                        )
+                      : Container(),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            approvalList.appNo,
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Flexible(
+                            child: RichText(
+                              overflow: TextOverflow.ellipsis,
+                              strutStyle: StrutStyle(fontSize: 12.0),
+                              text: TextSpan(
+                                  style: TextStyle(color: Colors.black),
+                                  text: approvalList.title),
+                            ),
+                          ),
+                          Text(
+                            'BU: ${approvalList.businessUnitName}',
+                            style: new TextStyle(),
+                          ),
+                          Text(
+                            'Total: ${approvalList.totalAmount} ${approvalList.currencyName}',
+                            style: new TextStyle(),
+                          ),
+                        ],
                       ),
-                    ],
+                      // color: Colors.amber,
+                      width: 100,
+                      height: 100,
+                    ),
                   ),
-                ),
+                  Container(
+                    height: 100,
+                    // width: 100,
+                    // color: Colors.blue,
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0, right: 8),
+                            child: Text(
+                              approvalList.appDate,
+                              style: new TextStyle(),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0, right: 8),
+                            child: approvalList.title != null
+                                ? Text(
+                                    approvalList.appStatus,
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: kGreyLightColor),
+                                  )
+                                : Container(),
+                          ),
+                          approvalList.appStatus != "Approved"
+                              ? Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: SizedBox(
+                                    width: 90,
+                                    height: 30.0,
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          elevation:
+                                              MaterialStateProperty.all(0),
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.green),
+                                          shadowColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.green)),
+                                      onPressed: () {
+                                        _goToDetails(context, approvalList);
+                                      },
+                                      child: Text("Action".toUpperCase(),
+                                          style: TextStyle(fontSize: 14)),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -386,25 +419,30 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
     if (!isLoading) {
       return Scaffold(
-        body: Column(
+        body: Background(
+            child: Column(
           children: [
             Expanded(
-              child: Background(
-                  child: approvalList.length != 0
-                      ? ListView(
-                          padding: const EdgeInsets.all(8),
-                          children: <Widget>[
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: approvalList.map((p) {
-                                  return notiDetailCard(p);
-                                }).toList()),
-                          ],
-                        )
-                      : Center(child: Text(noDataTxt))),
-            ),
+                // child: Background(
+                child: approvalList.length != 0
+                    ? ListView(
+                        padding: const EdgeInsets.all(8),
+                        children: <Widget>[
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: approvalList.map((p) {
+                                return notiDetailCard(p);
+                              }).toList()),
+                          SizedBox(
+                            height: 50,
+                          )
+                        ],
+                      )
+                    : Center(child: Text(noDataTxt))
+                // ),
+                ),
           ],
-        ),
+        )),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.filter_list_outlined),
           onPressed: () {

@@ -6,6 +6,7 @@ import 'package:p2p/constants.dart';
 import 'package:p2p/constants/AppConstant.dart';
 import 'package:p2p/localization/localization_constants.dart';
 import 'package:p2p/main.dart';
+import 'package:p2p/routes/route_names.dart';
 import './background.dart';
 import 'package:p2p/classes/language.dart';
 
@@ -94,6 +95,9 @@ class _BodyState extends State<Body> {
                         ),
                         title: Text(getTranslated(context, 'ChangePassword')),
                         trailing: Icon(Icons.keyboard_arrow_right),
+                        onTap: () {
+                          Navigator.pushNamed(context, changePasswordRoute);
+                        },
                       ),
                     ),
                     SizedBox(height: size.height * 0.02),
