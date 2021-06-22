@@ -1,23 +1,23 @@
-class ApprovalList {
+class NotiPodo {
   String modelErrors;
-  List<ResultObject> resultObject;
+  List<NotiResultObject> resultObject;
   int statusCode;
   bool isSuccess;
   String commonErrors;
 
-  ApprovalList(
+  NotiPodo(
       {this.modelErrors,
       this.resultObject,
       this.statusCode,
       this.isSuccess,
       this.commonErrors});
 
-  ApprovalList.fromJson(Map<String, dynamic> json) {
+  NotiPodo.fromJson(Map<String, dynamic> json) {
     modelErrors = json['ModelErrors'];
     if (json['ResultObject'] != null) {
-      resultObject = <ResultObject>[];
+      resultObject = <NotiResultObject>[];
       json['ResultObject'].forEach((v) {
-        resultObject.add(new ResultObject.fromJson(v));
+        resultObject.add(new NotiResultObject.fromJson(v));
       });
     }
     statusCode = json['StatusCode'];
@@ -38,7 +38,7 @@ class ApprovalList {
   }
 }
 
-class ResultObject {
+class NotiResultObject {
   int p2PTypeId;
   int appID;
   String appNo;
@@ -54,7 +54,7 @@ class ResultObject {
   int levelId;
   int createdBy;
 
-  ResultObject(
+  NotiResultObject(
       {this.p2PTypeId,
       this.appID,
       this.appNo,
@@ -70,7 +70,7 @@ class ResultObject {
       this.levelId,
       this.createdBy});
 
-  ResultObject.fromJson(Map<String, dynamic> json) {
+  NotiResultObject.fromJson(Map<String, dynamic> json) {
     p2PTypeId = json['P2PTypeId'];
     appID = json['AppID'];
     appNo = json['AppNo'];

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +8,6 @@ import 'package:p2p/Screens/Approval/approval.dart';
 import 'package:p2p/Screens/CashFlow/cashFlow.dart';
 import 'package:p2p/Screens/Dashboard/dashboard-page.dart';
 import 'package:p2p/Screens/Login/component/loginResponse.dart';
-import 'package:p2p/classes/MyConnectivity.dart';
 import 'package:p2p/constants.dart';
 import 'package:p2p/constants/AppConstant.dart';
 import 'package:p2p/constants/Network.dart';

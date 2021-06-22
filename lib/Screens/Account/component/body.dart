@@ -56,7 +56,7 @@ class _BodyState extends State<Body> {
                     Container(
                       child: ListTile(
                         leading: Container(
-                            width: 70.0,
+                            width: 80.0,
                             // height: 100.0,
                             // padding: const EdgeInsets.all(10.0),
                             decoration: new BoxDecoration(
@@ -64,7 +64,7 @@ class _BodyState extends State<Body> {
                                 image: new DecorationImage(
                                     fit: BoxFit.contain,
                                     image: AssetImage(
-                                        "assets/images/Profile-512.png")))),
+                                        "assets/images/profile.png")))),
                         title: Text('$fname $lname'),
                         subtitle: Text('$depname'),
                       ),

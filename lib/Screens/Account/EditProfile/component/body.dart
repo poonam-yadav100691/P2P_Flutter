@@ -34,12 +34,12 @@ class Body extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: new DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage("assets/images/Profile-512.png")))),
+                        image: AssetImage("assets/images/profile.png")))),
 
             TextWithIcon(
                 textIcon: Icons.person,
                 textValue:
-                    (fname != "null" || fname != null) ? "$fname $lname" :"--" ,
+                    (fname != "null" || fname != null) ? "$fname $lname" : "--",
                 iconColor: kPrimaryColor),
             TextWithIcon(
                 textIcon: Icons.email,
@@ -49,17 +49,17 @@ class Body extends StatelessWidget {
             TextWithIcon(
                 textIcon: Icons.assignment_ind,
                 textValue:
-                    (dptname != "null" || dptname != null) ?  dptname :"--",
+                    (dptname != "null" || dptname != null) ? dptname : "--",
                 iconColor: Colors.blue[500]),
             TextWithIcon(
                 textIcon: Icons.business,
                 textValue:
-                    (businame != "null" || businame != null) ?  businame:"--" ,
+                    (businame != "null" || businame != null) ? businame : "--",
                 iconColor: Colors.green),
             TextWithIcon(
                 textIcon: Icons.account_balance,
                 textValue:
-                    (dptname != "null" || dptname != null) ? dptname:"--" ,
+                    (dptname != "null" || dptname != null) ? dptname : "--",
                 iconColor: Colors.blue[800]),
             TextWithIcon(
                 textIcon: Icons.phone,

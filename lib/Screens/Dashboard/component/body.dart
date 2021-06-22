@@ -23,8 +23,8 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  var data = [0.0, 1.0, 1.5, 2.0, 0.0, 0.0, -0.5, -1.0, -0.5, 0.0, 0.0];
-  var data1 = [0.0, -2.0, 3.5, -2.0, 0.5, 0.7, 0.8, 1.0, 2.0, 3.0, 3.2];
+  // var data = [0.0, 1.0, 1.5, 2.0, 0.0, 0.0, -0.5, -1.0, -0.5, 0.0, 0.0];
+  // var data1 = [0.0, -2.0, 3.5, -2.0, 0.5, 0.7, 0.8, 1.0, 2.0, 3.0, 3.2];
   _BodyState();
   bool isLoading = true;
   ResultObject dashData;
@@ -145,7 +145,6 @@ class _BodyState extends State<Body> {
     Network().check().then((intenet) async {
       if (intenet != null && intenet) {
         try {
-          print("bodybodybodybody");
           setState(() {
             isLoading = true;
           });
@@ -245,179 +244,191 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
     print("@@@@@@@@@@@@@@@@@ $dashData");
     return Background(
-      child: Container(
-        margin: EdgeInsets.only(top: size.height * 0.05),
-        child: Column(
-          children: [
-            Container(
-              // margin: EdgeInsets.only(top: size.height * 0.05),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Container(
-                      width: 30,
-                      child: IconButton(
-                          icon: Icon(FontAwesomeIcons.bell),
-                          color: kPrimaryColor,
-                          onPressed: () {
-                            Navigator.pushNamed(context, notificationRoute);
-                          }),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(left: 70),
-                      // color: Colors.yellow,
-                      child: ClipOval(
-                        child: Image.asset(
-                          "assets/images/TKS_ERP.png",
-                          height: 65,
+      child: Column(children: [
+        Container(
+          margin: EdgeInsets.only(top: size.height * 0.05),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  // margin: EdgeInsets.only(top: size.height * 0.05),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Container(
+                          width: 30,
+                          child: IconButton(
+                              icon: Icon(FontAwesomeIcons.bell),
+                              color: kPrimaryColor,
+                              onPressed: () {
+                                Navigator.pushNamed(context, notificationRoute);
+                              }),
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: Container(
-                      child: DropdownButton<Language>(
-                        underline: SizedBox(),
-                        icon: Icon(
-                          Icons.language,
-                          color: Colors.pink,
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(left: 70),
+                          // color: Colors.yellow,
+                          child: ClipOval(
+                            child: Image.asset(
+                              "assets/images/TKS_ERP.png",
+                              height: 65,
+                            ),
+                          ),
                         ),
-                        onChanged: (Language language) {
-                          _changeLanguage(language);
-                        },
-                        items: Language.languageList()
-                            .map<DropdownMenuItem<Language>>(
-                              (e) => DropdownMenuItem<Language>(
-                                value: e,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Image.asset(
-                                      e.flag,
-                                      height: 25,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Container(
+                          child: DropdownButton<Language>(
+                            underline: SizedBox(),
+                            icon: Icon(
+                              Icons.language,
+                              color: Colors.pink,
+                            ),
+                            onChanged: (Language language) {
+                              _changeLanguage(language);
+                            },
+                            items: Language.languageList()
+                                .map<DropdownMenuItem<Language>>(
+                                  (e) => DropdownMenuItem<Language>(
+                                    value: e,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Image.asset(
+                                          e.flag,
+                                          height: 25,
+                                        ),
+                                        Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: Text(e.name)),
+                                      ],
                                     ),
-                                    Container(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Text(e.name)),
-                                  ],
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                !isLoading
+                    ? Container(
+                        child: dashData != null
+                            ? Column(children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 40),
+                                  // margin: EdgeInsets.only(top: size.height * 0.1),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: myTextItems(
+                                          getTranslated(context, "BuyingRate"),
+                                          dashData.buyUsd != null
+                                              ? dashData.buyUsd.toString()
+                                              : "-",
+                                          dashData.buyBaht != null
+                                              ? dashData.buyBaht.toString()
+                                              : "-",
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: myTextItems(
+                                            getTranslated(
+                                                context, "SellingRate"),
+                                            dashData.sellUsd != null
+                                                ? dashData.sellUsd.toString()
+                                                : "-",
+                                            dashData.sellBaht != null
+                                                ? dashData.sellBaht.toString()
+                                                : "-",
+                                          )),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: 30, left: 20, right: 20),
+                                  // margin: EdgeInsets.only(top: size.height * 0.2),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          _buildStatCard(
+                                              'PO Transactions',
+                                              getTranslated(
+                                                  context, 'TotalBudget'),
+                                              dashData.pOTotalBudget != null
+                                                  ? dashData.pOTotalBudget
+                                                      .toString()
+                                                  : "-",
+                                              Colors.orange),
+                                          _buildStatCard(
+                                              'PO Transactions',
+                                              getTranslated(
+                                                  context, 'Outstanding'),
+                                              dashData.pOOutStanding != null
+                                                  ? dashData.pOOutStanding
+                                                      .toString()
+                                                  : "-",
+                                              Colors.deepPurple),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          _buildStatCard(
+                                              'Non-PO Transactions',
+                                              getTranslated(
+                                                  context, 'TotalBudget'),
+                                              dashData.nonPOTotalBudget != null
+                                                  ? dashData.nonPOTotalBudget
+                                                      .toString()
+                                                  : "-",
+                                              Colors.green),
+                                          _buildStatCard(
+                                              'Non-PO Transactions',
+                                              getTranslated(
+                                                  context, 'Expenses'),
+                                              dashData.nonPOExpense != null
+                                                  ? dashData.nonPOExpense
+                                                      .toString()
+                                                  : "-",
+                                              Colors.blue),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ])
+                            : Container(
+                                margin: EdgeInsets.only(top: size.height * 0.2),
+                                child: Text(
+                                  "No Data!!!",
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ))
+                    : Container(
+                        margin: EdgeInsets.only(top: size.height * 0.2),
+                        child: Center(child: CircularProgressIndicator())),
+              ],
             ),
-            !isLoading
-                ? Container(
-                    child: dashData != null
-                        ? Column(children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 40),
-                              // margin: EdgeInsets.only(top: size.height * 0.1),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: myTextItems(
-                                      getTranslated(context, "BuyingRate"),
-                                      dashData.buyUsd != null
-                                          ? dashData.sellUsd.toString()
-                                          : "-",
-                                      dashData.buyBaht != null
-                                          ? dashData.sellBaht.toString()
-                                          : "-",
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: myTextItems(
-                                        getTranslated(context, "SellingRate"),
-                                        dashData.sellUsd != null
-                                            ? dashData.sellUsd.toString()
-                                            : "-",
-                                        dashData.sellBaht != null
-                                            ? dashData.sellBaht.toString()
-                                            : "-",
-                                      )),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin:
-                                  EdgeInsets.only(top: 30, left: 20, right: 20),
-                              // margin: EdgeInsets.only(top: size.height * 0.2),
-                              child: Column(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      _buildStatCard(
-                                          'PO Transactions',
-                                          getTranslated(context, 'TotalBudget'),
-                                          dashData.pOTotalBudget != null
-                                              ? dashData.pOTotalBudget
-                                                  .toString()
-                                              : "-",
-                                          Colors.orange),
-                                      _buildStatCard(
-                                          'PO Transactions',
-                                          getTranslated(context, 'Outstanding'),
-                                          dashData.pOOutStanding != null
-                                              ? dashData.pOOutStanding
-                                                  .toString()
-                                              : "-",
-                                          Colors.deepPurple),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      _buildStatCard(
-                                          'Non-PO Transactions',
-                                          getTranslated(context, 'TotalBudget'),
-                                          dashData.nonPOTotalBudget != null
-                                              ? dashData.nonPOTotalBudget
-                                                  .toString()
-                                              : "-",
-                                          Colors.green),
-                                      _buildStatCard(
-                                          'Non-PO Transactions',
-                                          getTranslated(context, 'Expenses'),
-                                          dashData.nonPOExpense != null
-                                              ? dashData.nonPOExpense.toString()
-                                              : "-",
-                                          Colors.blue),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ])
-                        : Container(
-                            margin: EdgeInsets.only(top: size.height * 0.2),
-                            child: Text(
-                              "No Data!!!",
-                              style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ))
-                : Container(
-                    margin: EdgeInsets.only(top: size.height * 0.2),
-                    child: Center(child: CircularProgressIndicator())),
-          ],
+          ),
         ),
-      ),
+      ]),
       // ),
     );
   }

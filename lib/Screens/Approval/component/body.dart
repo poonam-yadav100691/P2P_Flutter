@@ -210,7 +210,7 @@ class _BodyState extends State<Body> {
                   isLoading = false;
                 });
                 Fluttertoast.showToast(
-                    msg: "Something went wrong.. Please try again later.",
+                    msg: jsonResponse["ModelErrors"],
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     timeInSecForIosWeb: 1,
@@ -222,6 +222,14 @@ class _BodyState extends State<Body> {
           });
         } catch (e) {
           print("Error: $e");
+            Fluttertoast.showToast(
+                    msg: "Something went wrong.. Please try again later.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
           return (e);
         }
       } else {

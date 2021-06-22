@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:p2p/Screens/Account/component/background.dart';
 import 'package:p2p/Screens/ChangePAssword/changePassPODO.dart';
@@ -152,9 +153,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                               onPressed: () {
                                 if (confirmPassController.text.trim() !=
                                     newPassController.text.trim()) {
-                                  print(newPassController.text.trim());
-                                  print(confirmPassController.text.trim());
-                                  print(curPassController.text.trim());
                                   setState(() {
                                     errorTxt =
                                         "New password & confirm password do not match !";
@@ -172,6 +170,49 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                 )
               : Container(child: Center(child: CircularProgressIndicator()))),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+              child: const Text(
+            'Success!',
+            style: TextStyle(color: Colors.green, fontSize: 18),
+          )),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Center(
+                  child: Text(
+                      'Password changed successfully. Click OK and login again with new password.'),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Center(
+              child: TextButton(
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
+                ),
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, loginRoute, ModalRoute.withName(loginRoute));
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -205,8 +246,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 setState(() {
                   isLoading = false;
                 });
-                Navigator.pushNamedAndRemoveUntil(
-                    context, loginRoute, ModalRoute.withName(loginRoute));
+                _showMyDialog();
               } else {
                 if (changepass.modelErrors == 'Unauthorized') {
                   GetToken().getToken().then((value) {

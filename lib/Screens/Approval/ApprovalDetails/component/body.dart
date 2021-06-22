@@ -47,52 +47,79 @@ class _BodyState extends State<Body> {
   }
 
   Future<void> _submitAction(body) async {
-    print('$body');
+    Network().check().then((intenet) async {
+      if (intenet != null && intenet) {
+        try {
+          setState(() {
+            isLoading = true;
+          });
 
-    setState(() {
-      isLoading = true;
-    });
+          String uri = Services.ApprovalStatus;
 
-    String uri = Services.ApprovalStatus;
-
-    http.post(Uri.parse(uri), body: body).then((response) {
-      var jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
-      // MyRequests myRequest = new MyRequests.fromJson(jsonResponse);
-      if (jsonResponse["StatusCode"] == 200) {
-        setState(() {
-          isLoading = false;
-        });
-        Fluttertoast.showToast(
-            msg: "Status successfully updated to ${body["ApproveType"]} !",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        print("j&&& $jsonResponse");
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage(currentIndex: 1)),
-          (Route<dynamic> route) => false,
-        );
-        // Navigator.pushReplacement(
-        //     context, MaterialPageRoute(builder: (context) => HomePage()));
-      } else {
-        print("ModelError: ${jsonResponse["ModelErrors"]}");
-        if (jsonResponse["ModelErrors"] == 'Unauthorized') {
-          GetToken().getToken().then((value) {});
-        } else {
+          http.post(Uri.parse(uri), body: body).then((response) {
+            var jsonResponse = jsonDecode(response.body);
+            print(jsonResponse);
+            // MyRequests myRequest = new MyRequests.fromJson(jsonResponse);
+            if (jsonResponse["StatusCode"] == 200) {
+              setState(() {
+                isLoading = false;
+              });
+              Fluttertoast.showToast(
+                  msg:
+                      "Status successfully updated to ${body["ApproveType"]} !",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+              print("j&&& $jsonResponse");
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(currentIndex: 1)),
+                (Route<dynamic> route) => false,
+              );
+              // Navigator.pushReplacement(
+              //     context, MaterialPageRoute(builder: (context) => HomePage()));
+            } else {
+              print("ModelError: ${jsonResponse["ModelErrors"]}");
+              if (jsonResponse["ModelErrors"] == 'Unauthorized') {
+                GetToken().getToken().then((value) {});
+              } else {
+                Fluttertoast.showToast(
+                    msg: jsonResponse["ModelErrors"],
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              }
+            }
+          });
+        } catch (e) {
+          print("Error: $e");
           Fluttertoast.showToast(
-              msg: "Please check internet connection!!",
+              msg: "Something went wrong.. Please try again later.",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 1,
               backgroundColor: Colors.red,
               textColor: Colors.white,
               fontSize: 16.0);
+          return (e);
         }
+      } else {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+            msg: "Please check internet connection.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     });
   }
@@ -614,24 +641,21 @@ class _BodyState extends State<Body> {
                       )),
                     )),
                   ),
-                  approvalDetailsRst[0].appStatus != "Approved"
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 15.0, bottom: 10),
-                          child: SafeArea(
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                Container(
-                                  width: size.width * 0.8,
-                                  child: new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      new ElevatedButton(
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0, bottom: 10),
+                    child: SafeArea(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                          Container(
+                            width: size.width * 0.8,
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                approvalDetailsRst[0].isApprove
+                                    ? ElevatedButton(
                                         style: ButtonStyle(
                                             splashFactory:
                                                 NoSplash.splashFactory,
@@ -657,8 +681,10 @@ class _BodyState extends State<Body> {
                                         child: Text(
                                             getTranslated(context, 'Approve'),
                                             style: TextStyle(fontSize: 18)),
-                                      ),
-                                      new ElevatedButton(
+                                      )
+                                    : Container(),
+                                approvalDetailsRst[0].isReject
+                                    ? ElevatedButton(
                                         style: ButtonStyle(
                                             splashFactory:
                                                 NoSplash.splashFactory,
@@ -682,49 +708,42 @@ class _BodyState extends State<Body> {
                                                 fontSize: 16.0);
                                           }
                                         },
-                                      ),
-                                      approvalDetailsRst[0].appStatus != "Hold"
-                                          ? new ElevatedButton(
-                                              style: ButtonStyle(
-                                                  splashFactory:
-                                                      NoSplash.splashFactory,
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all<
-                                                          Color>(
-                                                    Colors.orange,
-                                                  )),
-                                              child: new Text(
-                                                  getTranslated(
-                                                      context, 'Hold'),
-                                                  style:
-                                                      TextStyle(fontSize: 18)),
-                                              onPressed: () {
-                                                if (resoneController.text !=
-                                                    "") {
-                                                  takeAction("Hold", appData);
-                                                } else {
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          "Please enter remark..!!",
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 1,
-                                                      backgroundColor:
-                                                          Colors.red,
-                                                      textColor: Colors.white,
-                                                      fontSize: 16.0);
-                                                }
-                                              },
-                                            )
-                                          : Container(),
-                                    ],
-                                  ),
-                                )
-                              ])),
-                        )
-                      : Container(),
+                                      )
+                                    : Container(),
+                                approvalDetailsRst[0].isHold
+                                    ? new ElevatedButton(
+                                        style: ButtonStyle(
+                                            splashFactory:
+                                                NoSplash.splashFactory,
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(
+                                              Colors.orange,
+                                            )),
+                                        child: new Text(
+                                            getTranslated(context, 'Hold'),
+                                            style: TextStyle(fontSize: 18)),
+                                        onPressed: () {
+                                          if (resoneController.text != "") {
+                                            takeAction("Hold", appData);
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg: "Please enter remark..!!",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                          }
+                                        },
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                          )
+                        ])),
+                  )
                 ],
               )
             : Container(child: Text("No Data")),
