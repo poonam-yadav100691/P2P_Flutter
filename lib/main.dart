@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:p2p/constants.dart';
 import 'package:p2p/localization/localization_constants.dart';
@@ -20,6 +21,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future onSelectNotification(String payload) async {
   print('######$payload');
   print('on note selected');
+  _removeBadge();
   // navigatorKey.currentState.pushNamed('/history');
 }
 
@@ -52,7 +54,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: onSelectNotification);
-
+  _addBadge();
   flutterLocalNotificationsPlugin.show(
       1,
       message.data['title'],
@@ -137,6 +139,20 @@ class _MyAppState extends State<MyApp> {
     super.didChangeDependencies();
   }
 
+  initPlatformState() async {
+    try {
+      bool res = await FlutterAppBadger.isAppBadgeSupported();
+      if (res) {
+        print('Supported');
+      } else {
+        print('Not supported');
+      }
+    } on PlatformException {
+      print('Failed to get badge support.');
+    }
+    if (!mounted) return;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (this._locale == null) {
@@ -176,4 +192,12 @@ class _MyAppState extends State<MyApp> {
       );
     }
   }
+}
+
+void _addBadge() {
+  FlutterAppBadger.updateBadgeCount(1);
+}
+
+void _removeBadge() {
+  FlutterAppBadger.removeBadge();
 }

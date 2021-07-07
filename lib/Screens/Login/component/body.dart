@@ -271,7 +271,7 @@ class _BodyState extends State<Body> {
                           ),
                           controller: passwordController,
                           autofocus: true,
-                          maxLength: 20,
+                          // maxLength: 20,
                           focusNode: focus,
                           validator: (value) =>
                               value.isEmpty ? 'Password can\'t be empty' : null,
